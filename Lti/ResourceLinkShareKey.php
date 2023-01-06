@@ -9,19 +9,21 @@ namespace Oscelot\Lti;
  */
 class ResourceLinkShareKey
 {
-
     /**
      * Maximum permitted life for a share key value.
      */
     public const MAX_SHARE_KEY_LIFE = 168;  // in hours (1 week)
+
     /**
      * Default life for a share key value.
      */
     public const DEFAULT_SHARE_KEY_LIFE = 24;  // in hours
+
     /**
      * Minimum length for a share key value.
      */
     public const MIN_SHARE_KEY_LENGTH = 5;
+
     /**
      * Maximum length for a share key value.
      */
@@ -31,22 +33,27 @@ class ResourceLinkShareKey
      * Consumer key for resource link being shared.
      */
     public ?string $primary_consumer_key = null;
+
     /**
      * ID for resource link being shared.
      */
     public ?string $primary_resource_link_id = null;
+
     /**
      * Length of share key.
      */
     public mixed $length = null;
+
     /**
      * Life of share key.
      */
     public mixed $life = null;  // in hours
+
     /**
      * True if the sharing arrangement should be automatically approved when first used.
      */
     public bool $auto_approve = false;
+
     /**
      * Date/time when the share key expires.
      */
@@ -56,16 +63,15 @@ class ResourceLinkShareKey
      * Share key value.
      */
     private ?string $id;
+
     /**
      * Data connector.
      */
     private mixed $data_connector;
 
     /**
-     * Class constructor.
-     *
-     * @param ResourceLink $resource_link Resource_Link object
-     * @param ?string       $id            Value of share key (optional, default is null)
+     * @param ResourceLink $resource_link Resource_Link object.
+     * @param ?string $id  Value of share key (optional, default is null).
      */
     public function __construct(ResourceLink $resource_link, ?string $id = null)
     {
@@ -97,7 +103,7 @@ class ResourceLinkShareKey
     /**
      * Save the resource link share key to the database.
      *
-     * @return bool True if the share key was successfully saved
+     * @return bool True if the share key was successfully saved.
      */
     public function save(): bool
     {
@@ -111,7 +117,13 @@ class ResourceLinkShareKey
             if (empty($this->length) || !is_numeric($this->length)) {
                 $this->length = self::MAX_SHARE_KEY_LENGTH;
             } else {
-                $this->length = max(min($this->length, self::MAX_SHARE_KEY_LENGTH), self::MIN_SHARE_KEY_LENGTH);
+                $this->length = max(
+                    min(
+                        $this->length,
+                        self::MAX_SHARE_KEY_LENGTH
+                    ),
+                    self::MIN_SHARE_KEY_LENGTH
+                );
             }
             $this->id = AbstractDataConnector::getRandomString($this->length);
         }
