@@ -1,0 +1,7 @@
+vendor
+.buildpath
+.idea
+.phpcs-cache
+.project
+.settings
+.DS_Store

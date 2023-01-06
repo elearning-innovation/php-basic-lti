@@ -1,0 +1,23 @@
+{
+  "name": "elearning-innovation/php-basic-lti",
+  "version": "1.0.0",
+  "description": "Ease learning's fork of the original oscelot LTI 1.1 library",
+  "type": "library",
+  "license": "LGPL-3.0-only",
+  "require": {
+    "php": "^8.2"
+  },
+  "require-dev": {
+    "laminas/laminas-coding-standard": "^2.3",
+    "squizlabs/php_codesniffer": "^3.4",
+    "vimeo/psalm": "^4.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Oscelot\\": "/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
