@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Oscelot\Lti;
 
 use \JsonException;
+use PDO;
 
 class DataConnectorPdo extends AbstractDataConnector
 {
     private string $dbTableNamePrefix;
-    private ?string $db = null;
+    private ?PDO $db = null;
 
     public function __construct(?string $db, string $dbTableNamePrefix = '')
     {
@@ -24,14 +25,14 @@ class DataConnectorPdo extends AbstractDataConnector
 ###
 #    Load the tool consumer from the database
 ###
-    public function Tool_Consumer_load($consumer): bool
+    public function Tool_Consumer_load(ToolConsumer $consumer): bool
     {
         $sql = 'SELECT name, secret, lti_version, consumer_name, consumer_version, consumer_guid, css_path, protected, enabled, enable_from, enable_until, last_access, created, updated ' .
            'FROM ' .$this->dbTableNamePrefix . AbstractDataConnector::CONSUMER_TABLE_NAME . ' ' .
            'WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
         $key = $consumer->getKey();
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, self::PARAM_STR);
         $ok = $query->execute();
 
         if ($ok) {
@@ -72,7 +73,7 @@ class DataConnectorPdo extends AbstractDataConnector
 ###
 #    Save the tool consumer to the database
 ###
-    public function Tool_Consumer_save($consumer): bool
+    public function Tool_Consumer_save(ToolConsumer $consumer): bool
     {
 
         if ($consumer->protected) {
@@ -157,26 +158,26 @@ class DataConnectorPdo extends AbstractDataConnector
 ###
 #    Delete the tool consumer from the database
 ###
-    public function Tool_Consumer_delete($consumer): bool
+    public function Tool_Consumer_delete(ToolConsumer $consumer): bool
     {
 
         $key = $consumer->getKey();
 // Delete any nonce values for this consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::NONCE_TABLE_NAME . ' WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, self::PARAM_STR);
         $query->execute();
 
 // Delete any outstanding share keys for resource links for this consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_SHARE_KEY_TABLE_NAME . ' WHERE primary_consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, self::PARAM_STR);
         $query->execute();
 
 // Delete any users in resource links for this consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::USER_TABLE_NAME . ' WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, self::PARAM_STR);
         $query->execute();
 
 // Update any resource links for which this consumer is acting as a primary resource link
@@ -184,19 +185,19 @@ class DataConnectorPdo extends AbstractDataConnector
            'SET primary_consumer_key = NULL AND primary_context_id = NULL ' .
            'WHERE primary_consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, self::PARAM_STR);
         $query->execute();
 
 // Delete any resource links for this consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, self::PARAM_STR);
         $query->execute();
 
 // Delete consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::CONSUMER_TABLE_NAME . ' WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, self::PARAM_STR);
         $ok = $query->execute();
 
         if ($ok) {
@@ -206,9 +207,11 @@ class DataConnectorPdo extends AbstractDataConnector
         return $ok;
     }
 
-###
-#    Load all tool consumers from the database
-###
+    /**
+     * Load all tool consumers from the database
+     *
+     * @return ToolConsumer[]
+     */
     public function Tool_Consumer_list(): array
     {
         $consumers = array();

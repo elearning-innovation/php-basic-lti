@@ -10,7 +10,8 @@
   "require": {
     "php": "^8.2",
     "ext-dom": "*",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "ext-pdo": "*"
   },
   "require-dev": {
     "laminas/laminas-coding-standard": "^2.3",
