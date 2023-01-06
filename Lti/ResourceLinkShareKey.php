@@ -13,65 +13,64 @@ class ResourceLinkShareKey
     /**
      * Maximum permitted life for a share key value.
      */
-    const MAX_SHARE_KEY_LIFE = 168;  // in hours (1 week)
+    public const MAX_SHARE_KEY_LIFE = 168;  // in hours (1 week)
     /**
      * Default life for a share key value.
      */
-    const DEFAULT_SHARE_KEY_LIFE = 24;  // in hours
+    public const DEFAULT_SHARE_KEY_LIFE = 24;  // in hours
     /**
      * Minimum length for a share key value.
      */
-    const MIN_SHARE_KEY_LENGTH = 5;
+    public const MIN_SHARE_KEY_LENGTH = 5;
     /**
      * Maximum length for a share key value.
      */
-    const MAX_SHARE_KEY_LENGTH = 32;
+    public const MAX_SHARE_KEY_LENGTH = 32;
 
     /**
      * Consumer key for resource link being shared.
      */
-    public $primary_consumer_key = null;
+    public ?string $primary_consumer_key = null;
     /**
      * ID for resource link being shared.
      */
-    public $primary_resource_link_id = null;
+    public ?string $primary_resource_link_id = null;
     /**
      * Length of share key.
      */
-    public $length = null;
+    public mixed $length = null;
     /**
      * Life of share key.
      */
-    public $life = null;  // in hours
+    public mixed $life = null;  // in hours
     /**
      * True if the sharing arrangement should be automatically approved when first used.
      */
-    public $auto_approve = false;
+    public bool $auto_approve = false;
     /**
      * Date/time when the share key expires.
      */
-    public $expires = null;
+    public mixed $expires = null;
 
     /**
      * Share key value.
      */
-    private $id = null;
+    private ?string $id;
     /**
      * Data connector.
      */
-    private $data_connector = null;
+    private mixed $data_connector;
 
     /**
      * Class constructor.
      *
-     * @param ResourceLink $resource_link  Resource_Link object
-     * @param string      $id      Value of share key (optional, default is null)
+     * @param ResourceLink $resource_link Resource_Link object
+     * @param ?string       $id            Value of share key (optional, default is null)
      */
-    public function __construct($resource_link, $id = null)
+    public function __construct(ResourceLink $resource_link, ?string $id = null)
     {
-
         $this->initialise();
-        $this->data_connector = $resource_link->getConsumer()->getDataConnector();
+        $this->data_connector = $resource_link->getConsumer()?->getDataConnector();
         $this->id = $id;
         $this->primary_context_id = &$this->primary_resource_link_id;
         if (!empty($id)) {
@@ -85,9 +84,8 @@ class ResourceLinkShareKey
     /**
      * Initialise the resource link share key.
      */
-    public function initialise()
+    public function initialise(): void
     {
-
         $this->primary_consumer_key = null;
         $this->primary_resource_link_id = null;
         $this->length = null;
@@ -101,9 +99,8 @@ class ResourceLinkShareKey
      *
      * @return bool True if the share key was successfully saved
      */
-    public function save()
+    public function save(): bool
     {
-
         if (empty($this->life)) {
             $this->life = self::DEFAULT_SHARE_KEY_LIFE;
         } else {
@@ -127,33 +124,26 @@ class ResourceLinkShareKey
      *
      * @return bool True if the share key was successfully deleted
      */
-    public function delete()
+    public function delete(): bool
     {
-
         return $this->data_connector->Resource_Link_Share_Key_delete($this);
     }
 
     /**
      * Get share key value.
      *
-     * @return string Share key value
+     * @return ?string Share key value
      */
-    public function getId()
+    public function getId(): ?string
     {
-
         return $this->id;
     }
-
-###
-###  PRIVATE METHOD
-###
 
     /**
      * Load the resource link share key from the database.
      */
-    private function load()
+    private function load(): void
     {
-
         $this->initialise();
         $this->data_connector->Resource_Link_Share_Key_load($this);
         if (!is_null($this->id)) {
