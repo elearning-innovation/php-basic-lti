@@ -18,7 +18,7 @@ class ContextShareKey extends ResourceLinkShareKey
      * @deprecated Use ResourceLinkShareKey->primary_resource_link_id instead
      * @see ResourceLinkShareKey::$primary_resource_link_id
      */
-    public $primary_context_id = null;
+    public mixed $primary_context_id = null;
 
     /**
      * Class constructor.

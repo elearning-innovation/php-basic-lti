@@ -18,7 +18,7 @@ class ContextShare extends ResourceLinkShare
      * @deprecated Use ResourceLink_Share->resource_link_id instead
      * @see ResourceLink_Share::$resource_link_id
      */
-    public $context_id = null;
+    public mixed $context_id = null;
 
     /**
      * Class constructor.
