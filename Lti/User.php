@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Oscelot\Lti;
 
+use AllowDynamicProperties;
+
 /**
  * Class to represent a tool consumer user
  */
+#[AllowDynamicProperties]
 class User
 {
     /**

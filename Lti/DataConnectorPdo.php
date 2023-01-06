@@ -7,12 +7,13 @@ namespace Oscelot\Lti;
 use \JsonException;
 use PDO;
 
+// phpcs:disable PSR1.Methods.CamelCapsMethodName
 class DataConnectorPdo extends AbstractDataConnector
 {
     private string $dbTableNamePrefix;
     private ?PDO $db = null;
 
-    public function __construct(?string $db, string $dbTableNamePrefix = '')
+    public function __construct(?PDO $db, string $dbTableNamePrefix = '')
     {
         $this->db = $db;
         $this->dbTableNamePrefix = $dbTableNamePrefix;
@@ -27,12 +28,14 @@ class DataConnectorPdo extends AbstractDataConnector
 ###
     public function Tool_Consumer_load(ToolConsumer $consumer): bool
     {
-        $sql = 'SELECT name, secret, lti_version, consumer_name, consumer_version, consumer_guid, css_path, protected, enabled, enable_from, enable_until, last_access, created, updated ' .
+        $sql = 'SELECT name, secret, lti_version, consumer_name,
+           consumer_version, consumer_guid, css_path, protected, enabled,
+           enable_from, enable_until, last_access, created, updated ' .
            'FROM ' .$this->dbTableNamePrefix . AbstractDataConnector::CONSUMER_TABLE_NAME . ' ' .
            'WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
         $key = $consumer->getKey();
-        $query->bindValue('key', $key, self::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
         $ok = $query->execute();
 
         if ($ok) {
@@ -75,7 +78,6 @@ class DataConnectorPdo extends AbstractDataConnector
 ###
     public function Tool_Consumer_save(ToolConsumer $consumer): bool
     {
-
         if ($consumer->protected) {
             $protected = 1;
         } else {
@@ -107,21 +109,21 @@ class DataConnectorPdo extends AbstractDataConnector
              'VALUES (:key, :name, :secret, :lti_version, :consumer_name, :consumer_version, :consumer_guid, :css_path, ' .
              ':protected, :enabled, :enable_from, :enable_until, :last_access, :created, :updated)';
             $query = $this->db->prepare($sql);
-            $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('name', $consumer->name, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('secret', $consumer->secret, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('lti_version', $consumer->lti_version, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('consumer_name', $consumer->consumer_name, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('consumer_version', $consumer->consumer_version, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('consumer_guid', $consumer->consumer_guid, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('css_path', $consumer->css_path, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('protected', $protected, DataConnectorPdo::PARAM_INT);
-            $query->bindValue('enabled', $enabled, DataConnectorPdo::PARAM_INT);
-            $query->bindValue('enable_from', $from, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('enable_until', $until, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('last_access', $last, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('created', $now, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('updated', $now, DataConnectorPdo::PARAM_STR);
+            $query->bindValue('key', $key, PDO::PARAM_STR);
+            $query->bindValue('name', $consumer->name, PDO::PARAM_STR);
+            $query->bindValue('secret', $consumer->secret, PDO::PARAM_STR);
+            $query->bindValue('lti_version', $consumer->lti_version, PDO::PARAM_STR);
+            $query->bindValue('consumer_name', $consumer->consumer_name, PDO::PARAM_STR);
+            $query->bindValue('consumer_version', $consumer->consumer_version, PDO::PARAM_STR);
+            $query->bindValue('consumer_guid', $consumer->consumer_guid, PDO::PARAM_STR);
+            $query->bindValue('css_path', $consumer->css_path, PDO::PARAM_STR);
+            $query->bindValue('protected', $protected, PDO::PARAM_INT);
+            $query->bindValue('enabled', $enabled, PDO::PARAM_INT);
+            $query->bindValue('enable_from', $from, PDO::PARAM_STR);
+            $query->bindValue('enable_until', $until, PDO::PARAM_STR);
+            $query->bindValue('last_access', $last, PDO::PARAM_STR);
+            $query->bindValue('created', $now, PDO::PARAM_STR);
+            $query->bindValue('updated', $now, PDO::PARAM_STR);
         } else {
             $sql = 'UPDATE ' . $this->dbTableNamePrefix . AbstractDataConnector::CONSUMER_TABLE_NAME . ' ' .
              'SET name = :name, secret = :secret, lti_version = :lti_version, ' .
@@ -129,20 +131,20 @@ class DataConnectorPdo extends AbstractDataConnector
              'protected = :protected, enabled = :enabled, enable_from = :enable_from, enable_until = :enable_until, last_access = :last_access, updated = :updated ' .
              'WHERE consumer_key = :key';
             $query = $this->db->prepare($sql);
-            $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('name', $consumer->name, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('secret', $consumer->secret, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('lti_version', $consumer->lti_version, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('consumer_name', $consumer->consumer_name, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('consumer_version', $consumer->consumer_version, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('consumer_guid', $consumer->consumer_guid, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('css_path', $consumer->css_path, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('protected', $protected, DataConnectorPdo::PARAM_INT);
-            $query->bindValue('enabled', $enabled, DataConnectorPdo::PARAM_INT);
-            $query->bindValue('enable_from', $from, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('enable_until', $until, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('last_access', $last, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('updated', $now, DataConnectorPdo::PARAM_STR);
+            $query->bindValue('key', $key, PDO::PARAM_STR);
+            $query->bindValue('name', $consumer->name, PDO::PARAM_STR);
+            $query->bindValue('secret', $consumer->secret, PDO::PARAM_STR);
+            $query->bindValue('lti_version', $consumer->lti_version, PDO::PARAM_STR);
+            $query->bindValue('consumer_name', $consumer->consumer_name, PDO::PARAM_STR);
+            $query->bindValue('consumer_version', $consumer->consumer_version, PDO::PARAM_STR);
+            $query->bindValue('consumer_guid', $consumer->consumer_guid, PDO::PARAM_STR);
+            $query->bindValue('css_path', $consumer->css_path, PDO::PARAM_STR);
+            $query->bindValue('protected', $protected, PDO::PARAM_INT);
+            $query->bindValue('enabled', $enabled, PDO::PARAM_INT);
+            $query->bindValue('enable_from', $from, PDO::PARAM_STR);
+            $query->bindValue('enable_until', $until, PDO::PARAM_STR);
+            $query->bindValue('last_access', $last, PDO::PARAM_STR);
+            $query->bindValue('updated', $now, PDO::PARAM_STR);
         }
         $ok = $query->execute();
         if ($ok) {
@@ -160,24 +162,23 @@ class DataConnectorPdo extends AbstractDataConnector
 ###
     public function Tool_Consumer_delete(ToolConsumer $consumer): bool
     {
-
         $key = $consumer->getKey();
 // Delete any nonce values for this consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::NONCE_TABLE_NAME . ' WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, self::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
         $query->execute();
 
 // Delete any outstanding share keys for resource links for this consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_SHARE_KEY_TABLE_NAME . ' WHERE primary_consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, self::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
         $query->execute();
 
 // Delete any users in resource links for this consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::USER_TABLE_NAME . ' WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, self::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
         $query->execute();
 
 // Update any resource links for which this consumer is acting as a primary resource link
@@ -185,19 +186,19 @@ class DataConnectorPdo extends AbstractDataConnector
            'SET primary_consumer_key = NULL AND primary_context_id = NULL ' .
            'WHERE primary_consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, self::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
         $query->execute();
 
 // Delete any resource links for this consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, self::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
         $query->execute();
 
 // Delete consumer
         $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::CONSUMER_TABLE_NAME . ' WHERE consumer_key = :key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, self::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
         $ok = $query->execute();
 
         if ($ok) {
@@ -272,7 +273,6 @@ class DataConnectorPdo extends AbstractDataConnector
      */
     public function Resource_Link_load($resource_link): bool
     {
-
         $key = $resource_link->getKey();
         $id = $resource_link->getId();
         $sql = 'SELECT consumer_key, context_id, lti_context_id, lti_resource_id, title, settings, ' .
@@ -280,8 +280,8 @@ class DataConnectorPdo extends AbstractDataConnector
            'FROM ' .$this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' ' .
            'WHERE (consumer_key = :key) AND (context_id = :id)';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, self::PARAM_STR);
-        $query->bindValue('id', $id, self::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
+        $query->bindValue('id', $id, PDO::PARAM_STR);
         $ok = $query->execute();
         if ($ok) {
             $row = $query->fetch();
@@ -293,7 +293,10 @@ class DataConnectorPdo extends AbstractDataConnector
             $resource_link->ResourceLink_id = $row['lti_resource_id'];
             $resource_link->title = $row['title'];
             $resource_link->settings = json_decode(
-                $row['settings'], true, 512, JSON_THROW_ON_ERROR
+                $row['settings'],
+                true,
+                512,
+                JSON_THROW_ON_ERROR
             );
             if (!is_array($resource_link->settings)) {
                 $resource_link->settings = unserialize($row['settings']);  // check for old serialized setting
@@ -316,7 +319,6 @@ class DataConnectorPdo extends AbstractDataConnector
 ###
     public function Resource_Link_save($resource_link): bool
     {
-
         $time = time();
         $now = date('Y-m-d H:i:s', $time);
         $settingsValue = json_encode($resource_link->settings);
@@ -329,33 +331,33 @@ class DataConnectorPdo extends AbstractDataConnector
              'VALUES (:key, :id, :lti_context_id, :lti_resource_id, :title, :settings, ' .
              ':primary_consumer_key, :primary_context_id, :share_approved, :created, :updated)';
             $query = $this->db->prepare($sql);
-            $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('id', $id, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('lti_context_id', $resource_link->lti_context_id, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('lti_resource_id', $resource_link->lti_resource_id, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('title', $resource_link->title, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('settings', $settingsValue, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('primary_consumer_key', $resource_link->primary_consumer_key, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('primary_context_id', $resource_link->primary_resource_link_id, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('share_approved', $resource_link->share_approved, DataConnectorPdo::PARAM_INT);
-            $query->bindValue('created', $now, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('updated', $now, DataConnectorPdo::PARAM_STR);
+            $query->bindValue('key', $key, PDO::PARAM_STR);
+            $query->bindValue('id', $id, PDO::PARAM_STR);
+            $query->bindValue('lti_context_id', $resource_link->lti_context_id, PDO::PARAM_STR);
+            $query->bindValue('lti_resource_id', $resource_link->lti_resource_id, PDO::PARAM_STR);
+            $query->bindValue('title', $resource_link->title, PDO::PARAM_STR);
+            $query->bindValue('settings', $settingsValue, PDO::PARAM_STR);
+            $query->bindValue('primary_consumer_key', $resource_link->primary_consumer_key, PDO::PARAM_STR);
+            $query->bindValue('primary_context_id', $resource_link->primary_resource_link_id, PDO::PARAM_STR);
+            $query->bindValue('share_approved', $resource_link->share_approved, PDO::PARAM_INT);
+            $query->bindValue('created', $now, PDO::PARAM_STR);
+            $query->bindValue('updated', $now, PDO::PARAM_STR);
         } else {
             $sql = 'UPDATE ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' ' .
              'SET lti_context_id = :lti_context_id, lti_resource_id = :lti_resource_id, title = :title, settings = :settings, ' .
              'primary_consumer_key = :primary_consumer_key, primary_context_id = :primary_context_id, share_approved = :share_approved, updated = :updated ' .
              'WHERE (consumer_key = :key) AND (context_id = :id)';
             $query = $this->db->prepare($sql);
-            $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('id', $id, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('lti_context_id', $resource_link->lti_context_id, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('lti_resource_id', $resource_link->lti_resource_id, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('title', $resource_link->title, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('settings', $settingsValue, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('primary_consumer_key', $resource_link->primary_consumer_key, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('primary_context_id', $resource_link->primary_resource_link_id, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('share_approved', $resource_link->share_approved, DataConnectorPdo::PARAM_INT);
-            $query->bindValue('updated', $now, DataConnectorPdo::PARAM_STR);
+            $query->bindValue('key', $key, PDO::PARAM_STR);
+            $query->bindValue('id', $id, PDO::PARAM_STR);
+            $query->bindValue('lti_context_id', $resource_link->lti_context_id, PDO::PARAM_STR);
+            $query->bindValue('lti_resource_id', $resource_link->lti_resource_id, PDO::PARAM_STR);
+            $query->bindValue('title', $resource_link->title, PDO::PARAM_STR);
+            $query->bindValue('settings', $settingsValue, PDO::PARAM_STR);
+            $query->bindValue('primary_consumer_key', $resource_link->primary_consumer_key, PDO::PARAM_STR);
+            $query->bindValue('primary_context_id', $resource_link->primary_resource_link_id, PDO::PARAM_STR);
+            $query->bindValue('share_approved', $resource_link->share_approved, PDO::PARAM_INT);
+            $query->bindValue('updated', $now, PDO::PARAM_STR);
         }
         $ok = $query->execute();
         if ($ok) {
@@ -377,31 +379,34 @@ class DataConnectorPdo extends AbstractDataConnector
         $key = $resource_link->getKey();
         $id = $resource_link->getId();
 // Delete any outstanding share keys for resource links for this consumer
-        $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_SHARE_KEY_TABLE_NAME . ' ' .
+        $sql = 'DELETE FROM ' . $this->dbTableNamePrefix
+            . AbstractDataConnector::RESOURCE_LINK_SHARE_KEY_TABLE_NAME . ' ' .
            'WHERE (primary_consumer_key = :key) AND (primary_context_id = :id)';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-        $query->bindValue('id', $id, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
+        $query->bindValue('id', $id, PDO::PARAM_STR);
         $ok = $query->execute();
 
 // Delete users
         if ($ok) {
-            $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::USER_TABLE_NAME . ' ' .
+            $sql = 'DELETE FROM ' . $this->dbTableNamePrefix
+                . AbstractDataConnector::USER_TABLE_NAME . ' ' .
              'WHERE (consumer_key = :key) AND (context_id = :id)';
             $query = $this->db->prepare($sql);
-            $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('id', $id, DataConnectorPdo::PARAM_STR);
+            $query->bindValue('key', $key, PDO::PARAM_STR);
+            $query->bindValue('id', $id, PDO::PARAM_STR);
             $ok = $query->execute();
         }
 
 // Update any resource links for which this is the primary resource link
         if ($ok) {
-            $sql = 'UPDATE ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' ' .
+            $sql = 'UPDATE ' . $this->dbTableNamePrefix
+                . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' ' .
              'SET primary_consumer_key = NULL AND primary_context_id = NULL ' .
              'WHERE (consumer_key = :key) AND (context_id = :id)';
             $query = $this->db->prepare($sql);
-            $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('id', $id, DataConnectorPdo::PARAM_STR);
+            $query->bindValue('key', $key, PDO::PARAM_STR);
+            $query->bindValue('id', $id, PDO::PARAM_STR);
             $ok = $query->execute();
         }
 
@@ -410,8 +415,8 @@ class DataConnectorPdo extends AbstractDataConnector
             $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' ' .
              'WHERE (consumer_key = :key) AND (context_id = :id)';
             $query = $this->db->prepare($sql);
-            $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-            $query->bindValue('id', $id, DataConnectorPdo::PARAM_STR);
+            $query->bindValue('key', $key, PDO::PARAM_STR);
+            $query->bindValue('id', $id, PDO::PARAM_STR);
             $ok = $query->execute();
         }
 
@@ -423,8 +428,8 @@ class DataConnectorPdo extends AbstractDataConnector
     }
 
 ###
-#    Obtain an array of User objects for users with a result sourcedId.  The array may include users from other
-#    resource links which are sharing this resource link.  It may also be optionally indexed by the user ID of a specified scope.
+#    Obtain an array of User objects for users with a result sourcedId. The array may include users from other
+#    resource links which are sharing this resource link. It may also be optionally indexed by the user ID of a specified scope.
 ###
     public function Resource_Link_getUserResultSourcedIDs($resource_link, bool $local_only, int $id_scope): array
     {
@@ -433,23 +438,30 @@ class DataConnectorPdo extends AbstractDataConnector
 
         if ($local_only) {
             $sql = 'SELECT u.consumer_key, u.context_id, u.user_id, u.lti_result_sourcedid ' .
-             'FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::USER_TABLE_NAME . ' AS u ' .
-             'INNER JOIN ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' AS c ' .
+             'FROM ' . $this->dbTableNamePrefix
+                . AbstractDataConnector::USER_TABLE_NAME . ' AS u ' .
+             'INNER JOIN '
+                . $this->dbTableNamePrefix
+                . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' AS c ' .
              'ON u.consumer_key = c.consumer_key AND u.context_id = c.context_id ' .
-             'WHERE (c.consumer_key = :key) AND (c.context_id = :id) AND (c.primary_consumer_key IS NULL) AND (c.primary_context_id IS NULL)';
+             'WHERE (c.consumer_key = :key) AND (c.context_id = :id) AND
+             (c.primary_consumer_key IS NULL) AND (c.primary_context_id IS NULL)';
         } else {
-            $sql = 'SELECT u.consumer_key, u.context_id, u.user_id, u.lti_result_sourcedid ' .
-             'FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::USER_TABLE_NAME . ' AS u ' .
-             'INNER JOIN ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' AS c ' .
-             'ON u.consumer_key = c.consumer_key AND u.context_id = c.context_id ' .
-             'WHERE ((c.consumer_key = :key) AND (c.context_id = :id) AND (c.primary_consumer_key IS NULL) AND (c.primary_context_id IS NULL)) OR ' .
-             '((c.primary_consumer_key = :key) AND (c.primary_context_id = :id) AND (share_approved = 1))';
+            $sql = 'SELECT u.consumer_key, u.context_id, u.user_id,
+                u.lti_result_sourcedid ' .
+                'FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::USER_TABLE_NAME . ' AS u ' .
+                'INNER JOIN ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_TABLE_NAME . ' AS c ' .
+                'ON u.consumer_key = c.consumer_key AND u.context_id = c.context_id ' .
+                'WHERE ((c.consumer_key = :key) AND (c.context_id = :id) AND
+                (c.primary_consumer_key IS NULL) AND (c.primary_context_id IS NULL)) OR ' .
+                '((c.primary_consumer_key = :key) AND (c.primary_context_id = :id)
+                AND (share_approved = 1))';
         }
         $key = $resource_link->getKey();
         $id = $resource_link->getId();
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-        $query->bindValue('id', $id, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
+        $query->bindValue('id', $id, PDO::PARAM_STR);
         if ($query->execute()) {
             while ($row = $query->fetch()) {
                 $user = new User($resource_link, $row['user_id']);
@@ -482,11 +494,11 @@ class DataConnectorPdo extends AbstractDataConnector
            'WHERE (primary_consumer_key = :key) AND (primary_context_id = :id) ' .
            'ORDER BY consumer_key';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-        $query->bindValue('id', $id, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
+        $query->bindValue('id', $id, PDO::PARAM_STR);
         if ($query->execute()) {
             while ($row = $query->fetch()) {
-                $share = new ResourceLink_Share();
+                $share = new ResourceLinkShare();
                 $share->consumer_key = $row['consumer_key'];
                 $share->resource_link_id = $row['context_id'];
                 $share->title = $row['title'];
@@ -511,18 +523,24 @@ class DataConnectorPdo extends AbstractDataConnector
 
 // Delete any expired nonce values
         $now = date('Y-m-d H:i:s', time());
-        $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::NONCE_TABLE_NAME . ' WHERE expires <= :now';
+        $sql = 'DELETE FROM '
+            . $this->dbTableNamePrefix
+            . AbstractDataConnector::NONCE_TABLE_NAME
+            . ' WHERE expires <= :now';
         $query = $this->db->prepare($sql);
-        $query->bindValue('now', $now, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('now', $now, PDO::PARAM_STR);
         $query->execute();
 
 // Load the nonce
         $key = $nonce->getKey();
         $value = $nonce->getValue();
-        $sql = 'SELECT value AS T FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::NONCE_TABLE_NAME . ' WHERE (consumer_key = :key) AND (value = :value)';
+        $sql = 'SELECT value AS T FROM '
+            . $this->dbTableNamePrefix
+            . AbstractDataConnector::NONCE_TABLE_NAME
+            . ' WHERE (consumer_key = :key) AND (value = :value)';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-        $query->bindValue('value', $value, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
+        $query->bindValue('value', $value, PDO::PARAM_STR);
         $ok = $query->execute();
         if ($ok) {
             $row = $query->fetch();
@@ -543,11 +561,14 @@ class DataConnectorPdo extends AbstractDataConnector
         $key = $nonce->getKey();
         $value = $nonce->getValue();
         $expires = date('Y-m-d H:i:s', $nonce->expires);
-        $sql = 'INSERT INTO ' . $this->dbTableNamePrefix . AbstractDataConnector::NONCE_TABLE_NAME . ' (consumer_key, value, expires) VALUES (:key, :value, :expires)';
+        $sql = 'INSERT INTO '
+            . $this->dbTableNamePrefix
+            . AbstractDataConnector::NONCE_TABLE_NAME
+            . ' (consumer_key, value, expires) VALUES (:key, :value, :expires)';
         $query = $this->db->prepare($sql);
-        $query->bindValue('key', $key, DataConnectorPdo::PARAM_STR);
-        $query->bindValue('value', $value, DataConnectorPdo::PARAM_STR);
-        $query->bindValue('expires', $expires, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('key', $key, PDO::PARAM_STR);
+        $query->bindValue('value', $value, PDO::PARAM_STR);
+        $query->bindValue('expires', $expires, PDO::PARAM_STR);
         $ok = $query->execute();
 
         return $ok;
@@ -566,9 +587,12 @@ class DataConnectorPdo extends AbstractDataConnector
 
 // Clear expired share keys
         $now = date('Y-m-d H:i:s', time());
-        $sql = 'DELETE FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_SHARE_KEY_TABLE_NAME . ' WHERE expires <= :now';
+        $sql = 'DELETE FROM '
+            . $this->dbTableNamePrefix
+            . AbstractDataConnector::RESOURCE_LINK_SHARE_KEY_TABLE_NAME
+            . ' WHERE expires <= :now';
         $query = $this->db->prepare($sql);
-        $query->bindValue('now', $now, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('now', $now, PDO::PARAM_STR);
         $query->execute();
 
 // Load share key
@@ -577,7 +601,7 @@ class DataConnectorPdo extends AbstractDataConnector
            'FROM ' . $this->dbTableNamePrefix . AbstractDataConnector::RESOURCE_LINK_SHARE_KEY_TABLE_NAME . ' ' .
            'WHERE share_key_id = :id';
         $query = $this->db->prepare($sql);
-        $query->bindValue('id', $id, DataConnectorPdo::PARAM_STR);
+        $query->bindValue('id', $id, PDO::PARAM_STR);
         $ok = $query->execute();
         if ($ok) {
             $row = $query->fetch();
