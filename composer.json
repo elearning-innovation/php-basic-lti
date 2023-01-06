@@ -4,6 +4,9 @@
   "description": "Ease learning's fork of the original oscelot LTI 1.1 library",
   "type": "library",
   "license": "LGPL-3.0-only",
+  "homepage": "https://easelearning.com",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "php": "^8.2"
   },
