@@ -1,0 +1,1000 @@
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<base href="http://www.spvsoftwareproducts.com/php/lti_tool_provider/"><style type="text/css">body { margin-left:0;margin-right:0;margin-top:0; }#google-cache-hdr {background:#f5f5f5 !important;font:13px arial,sans-serif !important;text-align:left !important;color:#202020 !important;border:0 !important;margin:0 !important;border-bottom:1px solid #cecece !important;line-height:16px !important ;padding:16px 28px 24px 28px !important;}#google-cache-hdr * {display:inline !important;font:inherit !important;text-align:inherit !important;color:inherit !important;line-height:inherit !important;background:none !important;border:0 !important;margin:0 !important;padding:0 !important;letter-spacing:0 !important;}#google-cache-hdr a {text-decoration:none !important;color:#1a0dab !important;}#google-cache-hdr a:hover { text-decoration:underline !important; }#google-cache-hdr a:visited { color:#609 !important; }#google-cache-hdr div { display:block !important;margin-top:4px !important; }#google-cache-hdr b {font-weight:bold !important;display:inline-block !important;direction:ltr !important;}</style><div id="google-cache-hdr"  dir=ltr><div>This is Google&#39;s cache of <a href="http://www.spvsoftwareproducts.com/php/lti_tool_provider/" dir="ltr">http://www.spvsoftwareproducts.com/php/lti_tool_provider/</a>. It is a snapshot of the page as it appeared on Jul 26, 2015 01:21:14 GMT. </div><div>The <a href="http://www.spvsoftwareproducts.com/php/lti_tool_provider/" dir="ltr">current page</a> could have changed in the meantime. <a href="http://support.google.com/websearch/bin/answer.py?hl=en&amp;p=cached&amp;answer=1687222">Learn more</a></div><div></div><div><span style="display:inline-block !important;margin-top:8px !important;margin-right:104px !important;white-space:nowrap !important;"><span style="margin-right:28px !important;"><a href="http://webcache.googleusercontent.com/search?q=cache:www.spvsoftwareproducts.com/php/lti_tool_provider/&strip=0&vwsrc=0">Full version</a></span><span style="margin-right:28px !important;"><span style="font-weight:bold !important;">Text-only version</span></span><span style="margin-right:28px !important;"><a href="http://webcache.googleusercontent.com/search?q=cache:www.spvsoftwareproducts.com/php/lti_tool_provider/&strip=0&vwsrc=1">View source</a></span></span><span style="display:inline-block !important;margin-top:8px !important;color:#717171 !important;">Tip: To quickly find your search term on this page, press <b>Ctrl+F</b> or <b>⌘-F</b> (Mac) and use the find bar.</span></div></div><div style="position:relative;margin:8px;">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>SPV Software Products: PHP LTI Tool Provider class</title>
+<meta name="author" content="Stephen P Vickers" />
+<meta name="description" content="PHP class to provide LTI 1 support for tool provider communication with tool consumers" />
+<meta name="keywords" content="LTI,Learning Tools Interoperability,Basic LTI,tool provider,tool consumer" />
+<meta name="publisher" content="Stephen P Vickers" />
+<meta name="copyright" content="Stephen P Vickers" />
+<meta name="Date" content="2015-05-20" />
+<meta name="format" content="text/html" />
+<meta name="language" content="en-gb" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+<div class="banner">
+<div class="float-left">
+<a href="/" title="SPV Software Products home page">SPV Software Products</a>
+</div><div class="float-left"><h1>PHP LTI Tool Provider class</h1></div>
+</div><div class="breadcrumb"><a href="/" title="Home page">Home</a> &raquo; <a href="../">PHP</a> &raquo;  <a href="./">LTI Tool Provider</a></div>
+<div class="content">
+
+
+<div class="doall"></div>
+
+<h2 class="expanded">Overview</h2>
+
+<div class="indent">
+
+<p>
+This set of PHP classes encapsulates the code required by an LTI 1 compliant
+tool provider to communicate with a tool consumer.  It includes support for LTI 1.1 and the unofficial extensions to Basic LTI.
+These classes supercede the <a href="../blti_tool_provider/" title="Basic LTI Tool Provider classes">Basic LTI Tool Provider classes</a>.
+A similar set of <a href="../../java/lti_tool_provider/" title="Java LTI Tool Provider classes">Java classes</a> is also available.  The
+<a href="../rating/" title="Sample Rating application">Rating tool</a> provides a sample application of this class libarary in use.
+</p>
+
+<p>
+Whilst supporting LTI 1 is relatively simple, the benefits to using a class library like this one are:
+</p>
+<ul>
+  <li>the abstraction layer provided by the classes keeps the LTI communications separate from the application code;</li>
+  <li>the code can be re-used between multiple tool providers;</li>
+  <li>LTI data is transformed into useful objects and missing data automatically replaced with sensible defaults;</li>
+  <li>the outcomes service function uses LTI 1.1 or the unofficial outcomes extension according to whichever is supported by the tool consumer;</li>
+  <li>the unofficial extensions for memberships and setting services are supported;</li>
+  <li>additional functionality is included to:
+    <ul>
+      <li>enable/disable a consumer key;</li>
+      <li>set start and end times for enabling access for each consumer key;</li>
+      <li>set up arrangements such that users from different resource links can all collaborate together within a single tool provider link;</li>
+    </ul>
+  </li>
+  <li>tool providers can take advantage of LTI updates with minimal impact on their application code.</li>
+</ul>
+
+</div>
+
+<h2 class="showhide">System requirements</h2>
+
+<div class="indent">
+
+<p>
+The LTI Tool Provider class is written for PHP 5.2 (or higher).
+Earlier versions may also work but have not been tested.
+</p>
+
+</div>
+
+<h2 class="showhide">Installation</h2>
+
+<div class="indent">
+
+<h3>PHP source files</h3>
+
+<p>
+The download file available from OSCELOT (see Licence section below) includes the following files:
+</p>
+<ul>
+  <li>LTI_Tool_Provider.php</li>
+  <li>LTI_Data_Connector_mysql.php</li>
+  <li>LTI_Data_Connector_mysqli.php</li>
+  <li>LTI_Data_Connector_oci.php</li>
+  <li>LTI_Data_Connector_pdo.php</li>
+  <li>LTI_Data_Connector_none.php</li>
+</ul>
+
+<p>
+The download file also includes the following dependent PHP file:
+</p>
+<ul>
+  <li><a href="http://code.google.com/p/oauth/">OAuth.php</a></li>
+</ul>
+
+<p>
+All the files should be located in the same directory.
+</p>
+
+<h3>Data connector classes</h3>
+
+<p>
+The classes persist data through a LTI_Data_Connector class.  Subclasses of this class are provided for
+database connections using MySQL, MySQLi, Oracle and PDO (which includes SQLite support).  These subclasses use
+a standard <a href="LTI_Tool_Provider-schema.pdf" title="PDF version of data structure" target="_blank">data structure</a>.  The data may
+alternatively be merged with an existing tool provider data schema by creating a modified subclass
+which retrieves and updates each object from the appropriate location.  To use the classes without persisting
+any data pass "none" as the data connector type.
+</p>
+
+<p>
+The standard connectors uses the following database tables and relationships (see lti-tables-mysql.sql file):
+</p>
+
+<pre class="brush: sql; toolbar: true; gutter: false;">
+CREATE TABLE lti_consumer (
+  consumer_key varchar(255) NOT NULL,
+  name varchar(45) NOT NULL,
+  secret varchar(32) NOT NULL,
+  lti_version varchar(12) DEFAULT NULL,
+  consumer_name varchar(255) DEFAULT NULL,
+  consumer_version varchar(255) DEFAULT NULL,
+  consumer_guid varchar(255) DEFAULT NULL,
+  css_path varchar(255) DEFAULT NULL,
+  protected tinyint(1) NOT NULL,
+  enabled tinyint(1) NOT NULL,
+  enable_from datetime DEFAULT NULL,
+  enable_until datetime DEFAULT NULL,
+  last_access date DEFAULT NULL,
+  created datetime NOT NULL,
+  updated datetime NOT NULL,
+  PRIMARY KEY (consumer_key)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE lti_context (
+  consumer_key varchar(255) NOT NULL,
+  context_id varchar(255) NOT NULL,
+  lti_context_id varchar(255) DEFAULT NULL,
+  lti_resource_id varchar(255) DEFAULT NULL,
+  title varchar(255) NOT NULL,
+  settings text,
+  primary_consumer_key varchar(255) DEFAULT NULL,
+  primary_context_id varchar(255) DEFAULT NULL,
+  share_approved tinyint(1) DEFAULT NULL,
+  created datetime NOT NULL,
+  updated datetime NOT NULL,
+  PRIMARY KEY (consumer_key, context_id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE lti_user (
+  consumer_key varchar(255) NOT NULL,
+  context_id varchar(255) NOT NULL,
+  user_id varchar(255) NOT NULL,
+  lti_result_sourcedid varchar(255) NOT NULL,
+  created datetime NOT NULL,
+  updated datetime NOT NULL,
+  PRIMARY KEY (consumer_key, context_id, user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE lti_nonce (
+  consumer_key varchar(255) NOT NULL,
+  value varchar(32) NOT NULL,
+  expires datetime NOT NULL,
+  PRIMARY KEY (consumer_key, value)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE lti_share_key (
+  share_key_id varchar(32) NOT NULL,
+  primary_consumer_key varchar(255) NOT NULL,
+  primary_context_id varchar(255) NOT NULL,
+  auto_approve tinyint(1) NOT NULL,
+  expires datetime NOT NULL,
+  PRIMARY KEY (share_key_id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+ALTER TABLE lti_context
+  ADD CONSTRAINT lti_context_consumer_FK1 FOREIGN KEY (consumer_key)
+   REFERENCES lti_consumer (consumer_key);
+
+ALTER TABLE lti_context
+  ADD CONSTRAINT lti_context_context_FK1 FOREIGN KEY (primary_consumer_key, primary_context_id)
+   REFERENCES lti_context (consumer_key, context_id);
+
+ALTER TABLE lti_user
+  ADD CONSTRAINT lti_user_context_FK1 FOREIGN KEY (consumer_key, context_id)
+   REFERENCES lti_context (consumer_key, context_id);
+
+ALTER TABLE lti_nonce
+  ADD CONSTRAINT lti_nonce_consumer_FK1 FOREIGN KEY (consumer_key)
+   REFERENCES lti_consumer (consumer_key);
+
+ALTER TABLE lti_share_key
+  ADD CONSTRAINT lti_share_key_context_FK1 FOREIGN KEY (primary_consumer_key, primary_context_id)
+   REFERENCES lti_context (consumer_key, context_id);
+</pre>
+
+<p>
+For a SQL Server database use a data type of tinyint in place of tinyint(1)
+(see lti-tables-mssql.sql file).
+For an Oracle database, use a data type of number in place of tinyint,
+timestamp in place of datetime, and clob or
+varchar(4000) in place of text (see lti-tables-oracle.sql
+and lti-tables-oracle-pdo.sql files):
+</p>
+
+<p>
+An optional prefix may be added to the table names.  For example, if a prefix of "MyApp_" is specified the expected table
+names would be MyApp_lti_consumer, MyApp_lti_context etc.
+</p>
+</div>
+
+<h2 class="showhide">Class definitions</h2>
+
+<div class="indent">
+
+<p>
+The following classes are defined:
+</p>
+<ul>
+  <li>LTI_Tool_Provider</li>
+  <li>LTI_Tool_Consumer</li>
+  <li>LTI_Consumer_Nonce</li>
+  <li>LTI_Resource_Link</li>
+  <li>LTI_Resource_Link_Share</li>
+  <li>LTI_Resource_Link_Share_Key</li>
+  <li>LTI_User</li>
+  <li>LTI_Outcome</li>
+  <li>LTI_HTTP_Message</li>
+  <li>LTI_OAuthDataStore</li>
+  <li>LTI_Data_Connector (abstract)</li>
+  <li>LTI_Content_Item</li>
+  <li>LTI_Content_Item_Image</li>
+  <li>LTI_Content_Item_Placement</li>
+</ul>
+<p>
+The classes are fully described in the <a href="phpdocs.html" target="_blank">PHPDocs documentation</a>.  The following classes are
+now deprecated:
+</p>
+<ul>
+  <li>LTI_Context - replaced with LTI_Resource_Link</li>
+  <li>LTI_Context_Share  - replaced with LTI_Resource_Link_Share</li>
+  <li>LTI_Context_Share_Key - replaced with LTI_Resource_Link_Share_Key</li>
+</ul>
+
+</div>
+
+
+<h2 class="showhide">Usage</h2>
+
+<div class="indent">
+
+<p>
+A quick way to see how LTI can be used to integrate an external tool with a learning environment is to watch the following
+screencast showing how it is being used with WebPA, a peer assessment tool.  Note that, whilst this uses Blackboard Learn 9 as the
+learning environment, the same integration is possible with any other which provides support for the unofficial extensions,
+this includes WebCT, Moodle, Sakai.<br />
+
+Flash movie&nbsp;<a href=#>View&nbsp;movie&nbsp;illustration - An instructor's view of LTI</a>&nbsp;(10:46&nbsp;minutes)
+</p>
+
+<p>
+Having a learning application hosted outside the learning environment also introduces opportunities for users coming from different
+resource links to share the same working area within the external tool.  This is illustrated by the following screencast which shows
+how students from different resurce links (which could be from different learning environments and/or different institutions) can be
+joined together to work on the same peer assessment exercise.<br />
+Flash movie&nbsp;<a href=#>View&nbsp;movie&nbsp;illustration - Using LTI to allow student collaboration</a>&nbsp;(6:13&nbsp;minutes)
+</p>
+<!--
+<p>
+The notes used with a face-to-face <a href="http://ltiapps.net/workshop/" target="_blank">LTI Tool developer workshop</a> also provide
+guidance on how to use this class library.
+</p>
+-->
+<h3>Using the PHP classes</h3>
+
+<p>
+The classes should be may available for use in a PHP file as follows:
+</p>
+
+<pre class="brush: php; toolbar: true;">
+require_once('LTI_Tool_Provider.php');
+</pre>
+
+<h3>Specifying a data connector</h3>
+
+<p>
+Data is persisted by the classes via a subclass of the LTI_Data_Connector class.  There are two elements to specifying
+a data connector:
+</p>
+<ul>
+  <li>a data source (database connection or handle)</li>
+  <li>a table name prefix</li>
+</ul>
+<p>
+The default data source is a pre-existing MySQL connection; the default table name prefix is an empty string (i.e. no
+prefix).  The data source may be specified by name (for "MySQL" databases) or by database handle (the object returned
+when a database connection is established).
+</p>
+<ul>
+  <li>by default the classes assume that a MySQL database connection has been established</li>
+  <li>by name: "MySQL", "None" (names are not case sensitive)</li>
+  <li>by database handle</li>
+</ul>
+<p>
+Some examples are shown below.
+</p>
+
+<h4>MySQL data connector</h4>
+
+<p>
+The following code snippets are all equivalent and set up a data connector using a MySQL connection with no
+table name prefix.
+</p>
+
+<pre class="brush: php;">
+$db_connector = LTI_Data_Connector::getDataConnector('');
+</pre>
+
+<pre class="brush: php;">
+mysql_connect($db_server, $db_user, $db_password);
+mysql_select_db($db_schema);
+
+$db_connector = LTI_Data_Connector::getDataConnector('');
+</pre>
+
+<pre class="brush: php;">
+mysql_connect($db_server, $db_user, $db_password);
+mysql_select_db($db_schema);
+
+$db_connector = LTI_Data_Connector::getDataConnector('', 'MySQL');
+</pre>
+
+<h4>MySQLi data connector</h4>
+
+<p>
+A MySQLi connection with a table name prefix of "MyApp_" can be established as follows:
+</p>
+
+<pre class="brush: php;">
+$db = new mysqli($db_server, $db_user, $db_password, $db_schema);
+
+$db_connector = LTI_Data_Connector::getDataConnector('MyApp_', $db);
+</pre>
+
+<h4>Oracle data connector</h4>
+
+<p>
+An Oracle connection with a table name prefix of "MyApp_" can be established as follows:
+</p>
+
+<pre class="brush: php;">
+$db = oci_connect($db_user, $db_password, '{db_host}:{db_port}/{$db_service}');
+
+$db_connector = LTI_Data_Connector::getDataConnector('MyApp_', $db, 'oci');
+</pre>
+
+<p>
+Note the need to explicitly state the type as being oci when creating the data connector.
+</p>
+
+<h4>PDO data connector</h4>
+
+<p>
+The PDO data connector can be used with different databases, such as SQL Server, Oracle and SQLite.
+These are illustrated by the examples below.
+</p>
+
+<pre class="brush: php;">
+$db = new PDO("mssql:host={$db_host};dbname={$db_schema}", $db_user, $db_password);
+
+$db_connector = LTI_Data_Connector::getDataConnector('', $db);
+</pre>
+
+<pre class="brush: php;">
+$db = new PDO("oci:dbname={$db_schema}", $db_user, $db_password);
+
+$db_connector = LTI_Data_Connector::getDataConnector('', $db);
+</pre>
+
+<pre class="brush: php;">
+$db = new PDO('sqlite::memory:');
+
+$db_connector = LTI_Data_Connector::getDataConnector('', $db);
+</pre>
+
+<h4>No data connector</h4>
+
+<p>
+To use the classes without any data persistence use the following:
+</p>
+
+<pre class="brush: php;">
+$db_connector = LTI_Data_Connector::getDataConnector('', 'none');
+</pre>
+
+<h3>Initialising a tool consumer</h3>
+
+<p>
+When a launch request is received it will be validated with the shared secret associated with
+the consumer key.  The default data structure uses the lti_consumer
+table to record details of tool consumers.  A record may be initialised as follows:
+</p>
+
+<pre class="brush: php;">
+$consumer = new LTI_Tool_Consumer('testing.edu', $db_connector);
+$consumer->name = 'Testing';
+$consumer->secret = 'ThisIsASecret!';
+$consumer->save();
+</pre>
+
+<p>
+To avoid the need to create a data connector object in advance, it is possible to pass the values from
+which the object may be created; for example:
+</p>
+
+<ul>
+  <li>'MyApp_' - a MySQL database connection with a table name prefix of "MyApp_"</li>
+  <li>$db - uses the MySQLi or PDO database handle with no table name prefix</li>
+  <li>array('MyApp_', $db) - uses the MySQLi or PDO database handle with a table name prefix of "MyApp_"</li>
+  <li>omit the parameter to use a MySQL database connection with no table name prefix</li>
+</ul>
+
+<p>
+By default, a tool consumer instance is disabled (i.e. will not be used to accept any incoming requests).  A tool
+consumer may be enabled when it is created or updated as follows:
+</p>
+<pre class="brush: php;">
+$consumer = new LTI_Tool_Consumer('testing.edu', $db_connector);
+if (!is_null($consumer->created)) {
+  $consumer->enabled = TRUE;
+  $consumer->save();
+}
+</pre>
+
+<h3>Validating a launch request</h3>
+
+<p>
+The primary use case for the classes is to validate an incoming launch request from a tool consumer.  Once
+a record has been initialised for the tool consumer (see above), the verification of the authenticity of the LTI
+launch request is handled automatically by the LTI_Tool_Provider class; a callback is made to a method for
+processing the request if the request is valid (see below).  For example, if the name of the callback method is "doLaunch" the
+following code will check the incoming request.
+</p>
+
+<pre class="brush: php;">
+class My_LTI_Tool_Provider extends LTI_Tool_Provider {
+
+  function onLaunch() {
+
+    // Insert code here to handle incoming connections - use the user
+    // and resource_link properties of the class instance
+    // to access the current user and resource link.
+
+  }
+
+}
+
+$tool = new My_LTI_Tool_Provider($db_connector);
+$tool->execute();
+</pre>
+
+<p>
+The execute method checks the authenticity of the incoming request by
+verifying the OAuth signature (using the shared secret recorded for the tool consumer), the timestamp
+is within a defined limit of the current time, and the nonce value has not been previously used.  Only if the
+request passes all these checks is the callback function called.
+The following parameters are automatically saved for future use in the LTI_Resource_Link object
+when a launch request is executed with the LTI services:
+<ul>
+  <li>ext_resource_link_content</li>
+  <li>ext_resource_link_content_signature</li>
+  <li>lis_result_sourcedid</li>
+  <li>ext_ims_lis_basic_outcome_url</li>
+  <li>ext_ims_lis_resultvalue_sourcedids</li>
+  <li>ext_ims_lis_memberships_id</li>
+  <li>ext_ims_lis_memberships_url</li>
+  <li>ext_ims_lti_tool_setting</li>
+  <li>ext_ims_lti_tool_setting_id</li>
+  <li>ext_ims_lti_tool_setting_url</li>
+</ul>
+
+<p>
+(The LTI_Resource_Link methods of getSetting, setSetting and
+saveSettings may also be used with user-defined setting values.)
+</p>
+
+<p>
+When a launch is not valid, a message is returned to the tool consumer ("Sorry, there was an error connecting you to the application.");
+this message can be changed at the top of the class file.
+If a custom parameter of debug=true is
+included in the launch then a more precise reason for the failure is returned:
+</p>
+<ul>
+  <li>Tool consumer instance has not been enabled by the tool provider.</li>
+  <li>Invalid nonce.</li>
+  <li>OAuth signature check failed - perhaps an incorrect secret.</li>
+  <li>Your sharing request has been refused because sharing is not being permitted.</li>
+  <li>An error occurred initialising your share arrangement.</li>
+  <li>You have requested to share a resource link but none is available.</li>
+  <li>It is not possible to share your resource link with yourself.</li>
+  <li>You have requested to share a resource link but none is available.</li>
+  <li>You have requested to share a resource link but none is available.</li>
+  <li>Your share request is waiting to be approved.</li>
+  <li>You have not requested to share a resource link but an arrangement is currently in place.</li>
+  <li>Unable to load resource link being shared.</li>
+</ul>
+
+<h4>Content-item message and other callbacks</h4>
+
+<p>
+If your tool also supports other types of message, then the associated methods should also be overridden; for example:
+</p>
+
+<pre class="brush: php;">
+class My_LTI_Tool_Provider extends LTI_Tool_Provider {
+
+  function onLaunch() {
+
+    // Insert code here to handle incoming launches - use the user
+    // and resource_link properties of the $tool_provider parameter
+    // to access the current user and resource link.
+
+  }
+
+  function onConfigure() {
+
+    // Insert code here to handle incoming configuration message requests - this
+    // is an extension of the IMS specification supported by the BasicLTI Building
+    // Block for Blackboard Learn 9.  It can be generated by a system administrator.
+
+  }
+
+  function onDashboard() {
+
+    // Insert code here to handle incoming dashboard message requests - this
+    // is an extension of the IMS specification supported by the BasicLTI Building
+    // Block for Blackboard Learn 9.  It is a server-to-server request with the
+    // response (typically HTML or RSS XML) being used to populate a portlet
+    // (Blackboard module) displayed to the user.
+
+  }
+
+  function onContentItem() {
+
+    // Insert code here to handle incoming content-item requests - use the user
+    // property of the $tool_provider parameter to access the current user.
+
+  }
+
+  function onError() {
+
+    // Insert code here to handle errors on incoming connections - do not expect
+    // the user and resource_link properties to be populated but check the reason
+    // property for the cause of the error.  Return TRUE if the error was fully
+    // handled by this function.
+
+  }
+
+}
+
+$tool = new My_LTI_Tool_Provider($db_connector);
+$tool->execute();
+</pre>
+
+<h4>Protecting a consumer key</h4>
+
+<p>
+The connection between a tool consumer and a tool provider is secured using a consumer key and a shared secret.  However, there
+are some risks to this mechanism:
+</p>
+<ol>
+  <li>launch requests will continue to be accepted even if a licence as expired;</li>
+  <li>if the consumer key is used to submit launch requests from more than one tool conumser, there is a risk of clashing resource link
+    and user IDs being received from each.</li>
+</ol>
+<p>
+The first risk can be avoided by manually removing or disabling the consumer key as soon as the licence expires.  Alternatively, the dates for any licence
+may be recorded for the tool consumer so that the appropriate check is made automatically when a launch request is received.
+</p>
+
+<p>
+The second risk can be alleviated
+by setting the protected property of the tool consumer.  This will cause launch requests to be only accepted from tool consumers
+with the same tool_consumer_guid parameter.  The value of this parameter is recorded from the first launch request received using
+the associated consumer key.  Note that this facility depends upon the tool consumer sending a value for the tool_consumer_guid parameter
+and each tool consumer having a unique value for this parameter.
+</p>
+
+<p>
+The following code illustrates how these options may be set:
+</p>
+<pre class="brush: php; highlight: [5, 8];">
+// load the tool consumer record
+$consumer = new LTI_Tool_Consumer('testing.edu', $db_connector);
+
+// set an expiry date for 30 days time
+$consumer->enable_until = time() + (30 * 24 * 60 * 60);
+
+// protect use of the consumer key to a single tool consumer
+$consumer->protected = TRUE;
+
+// save the changes
+$consumer->save();
+</pre>
+<p>
+Note that the default value of the enable_from property is NULL which means that
+access is available immediately.  A NULL value for the enable_until property means that
+access does not automatically expire (this is also the default).
+</p>
+
+<h4>Callback methods</h4>
+
+<p>
+A callback method is defined in the LTI_Tool_Provider class for each valid message type and for handling errors.
+These methods should be overridden in the subclass to perform whatever processing is required.  The methods defined are:
+</p>
+<ul>
+  <li>onLaunch (for basic-lti-launch request messages)</li>
+  <li>onConfigure (for ConfigureLaunchRequest request messages)</li>
+  <li>onDashboard (for DashboardRequest request messages)</li>
+  <li>onContentItem (for ContentItemSelectionRequest request messages)</li>
+  <li>onError (for invalid request messages)</li>
+</ul>
+
+<p>
+The callback method may be used to:
+</p>
+<ul>
+  <li>create the user account if it does not already exist (or update it if it does);</li>
+  <li>create the resource link area if it does not already exist (or update it if it does);</li>
+  <li>set up a new session for the user (or otherwise log the user into the tool provider application);</li>
+  <li>keep a record of the return URL for the tool consumer (for example, as a session variable);</li>
+  <li>return the URL for the home page of the application so the user may be redirected to it (or false if the connection
+    request is not to be accepted).</li>
+</ul>
+
+<p>
+Even though a request may be in accordance with the LTI specification, a tool provider may still choose to
+reject it because, for example, not all of the required data has been passed.  A request may be rejected by
+a callback method as follows:
+</p>
+<ul>
+  <li>optionally set an error message to return to the user (if the tool consumer supports this facility);</li>
+  <li>set the isOK property to FALSE.</li>
+</ul>
+<p>
+For example:
+</p>
+<pre class="brush: php;">
+  function onLaunch() {
+
+    ...
+
+    $this->reason = 'Incomplete data';
+    $this->isOK = FALSE;
+
+  }
+</pre>
+
+<h4>Content-item resource link IDs</h4>
+
+<p>
+One of the differences in handling a content-item message request is that any LTI links your tool passes back to be
+created will not yet have an associated resource link ID.  One solution to this is to create an internal resource link ID
+for the resource and add this as a custom parameter to the link with a name of content_item_id.
+When a launch request is received from a resource link ID which is not recognised and this custom parameter is present,
+a check is made for a resource link with the value of the parameter.  If found, the resource link ID is updated with the
+resource link ID from the launch request and so the custom parameter will be ignored on any subsequent launches.  In this way,
+the LTI link created via a content-item request will be automatically connected to the resource link created in the tool
+consumer.  For example, here is the code used to implement this workflow in the
+<a href="../rating/" title="Sample Rating application">sample Rating application</a>:
+</p>
+
+<pre class="brush: php; highlight: [7];">
+  ...
+  $item = new LTI_Content_Item('LtiLink', $placement);
+  $item->setMediaType(LTI_Content_Item::LTI_LINK_MEDIA_TYPE);
+  $item->setTitle($_SESSION['title']);
+  $item->setText($_SESSION['text']);
+  $item->icon = new LTI_Content_Item_Image(getAppUrl() . 'images/icon50.png', 50, 50);
+  $item->custom = array('content_item_id' => $_SESSION['resource_id']);
+  $form_params['content_items'] = LTI_Content_Item::toJson($item);
+  if (!is_null($_SESSION['data'])) {
+    $form_params['data'] = $_SESSION['data'];
+  }
+  $data_connector = LTI_Data_Connector::getDataConnector(DB_TABLENAME_PREFIX, $db);
+  $consumer = new LTI_Tool_Consumer($_SESSION['consumer_key'], $data_connector);
+  $form_params = $consumer->signParameters($_SESSION['return_url'], 'ContentItemSelection', $_SESSION['lti_version'], $form_params);
+  $page = LTI_Tool_Provider::sendForm($_SESSION['return_url'], $form_params);
+  echo $page;
+  exit;
+  ...
+</pre>
+<p>
+The $_SESSION['resource_id'] variable contains a GUID generated on launch; this is used as the placeholder until
+the first launch of this item is performed and the validation of the request will automatically replace this resource link ID with the one passed
+in the launch parameters.
+</p>
+
+<h4>Callback functions (deprecated)</h4>
+
+<p>
+A callback function may be associated with the launch action according to the value passed to the constructor of the
+LTI_Tool_Provider object.  The LTI_Tool_Provider object
+is passed into the callback function with the resource_link and
+user populated with values received via the launch request.
+</p>
+<pre class="brush: php;">
+$tool = new LTI_Tool_Provider($db_connector, array('launch' => 'doLaunch'));
+$tool->execute();
+
+function doLaunch($tool_provider) {
+
+// Get consumer key
+  $consumer_key = $tool_provider->consumer->getKey();
+
+// Get user ID
+  $user_id = $tool_provider->user->getId();
+
+// Get resource link ID
+  $context_id = $tool_provider->resource_link->getId();
+
+  ...
+
+}
+</pre>
+<p>
+The following names of callback functions are recognised:
+</p>
+<ul>
+  <li>launch</li>
+  <li>configure</li>
+  <li>dashboard</li>
+  <li>content-item</li>
+  <li>error</li>
+</ul>
+
+<p>
+The return value of the callback functions should be one of the following:
+</p>
+
+<ul>
+  <li>a boolean value representing success or failure of the request;</li>
+  <li>a string starting with 'http://' or 'https://' representing the URL to redirect a user to;</li>
+  <li>a string containing the text to be returned to the tool consumer (unless a return URL was specified in the
+    incoming request in which case a user is redirected to this URL).</li>
+</ul>
+
+<h3>Services</h3>
+
+<p>
+The LTI_Resource_Link class provides support for the following services:
+</p>
+<ul>
+  <li>Outcomes</li>
+  <li>Memberships</li>
+  <li>Setting</li>
+</ul>
+<p>
+These services are unofficial extensions of Basic LTI (LTI 1.0).  An Outcomes service is also included in the
+LTI 1.1 specification; the classes support both versions of the Outcomes service.
+</p>
+
+<p>
+In order to submit a service request, the relevant LTI_Resource_Link object is required;
+this object is identified by the consumer key and resource link ID:
+</p>
+<pre class="brush: php;">
+$consumer = new LTI_Tool_Consumer($consumer_key, $db);
+$resource_link = new LTI_Resource_Link($consumer, $resource_link_id);
+</pre>
+
+<h4>Outcomes service</h4>
+
+<p>
+A grade book for a specific user is identified by their associated result sourcedid; these values are passed
+when the user launches the tool and are automatically retained by the classes for future use.  The result sourcedid
+for the current user could be saved as a session variable as part of the callback function on launch.  Alternatively,
+the value may be obtained by loading the LTI_User record from its user ID:
+</p>
+<pre class="brush: php;">
+$user = new LTI_User($resource_link, $user_id);
+</pre>
+
+<p>
+The user's grade may be retrieved from the grade book in the tool consumer using a read operation:
+</p>
+<pre class="brush: php;">
+$outcome = new LTI_Outcome();
+if ($resource_link->doOutcomesService(LTI_Resource_Link::EXT_READ, $outcome, $user)) {
+  $score = $outcome->getValue();
+}
+</pre>
+
+<p>
+The user's grade may be saved to the grade book in the tool consumer using a write operation:
+</p>
+<pre class="brush: php;">
+$outcome = new LTI_Outcome();
+$outcome->setValue($score);
+$ok = $resource_link->doOutcomesService(LTI_Resource_Link::EXT_WRITE, $outcome, $user);
+</pre>
+<p>
+The score should normally be a decimal value between 0 and 1, but the
+doOutcomesService method makes every effort to convert the value passed
+to a format which is accepted by the tool consumer; for example, a percentage of 65% may be converted to
+a decimal 0.65.  The delete operation can be used to remove a grade from the grade book.
+</p>
+
+<h4>Memberships service</h4>
+
+<p>
+The doMembershipsService() method allows a tool provider to request a list of users
+with access to the resource link from the tool consumer.  The method returns an array of LTI_User
+objects.
+</p>
+<pre class="brush: php;">
+$users = $resource_link->doMembershipsService();
+</pre>
+
+<h4>Setting service</h4>
+
+<p>
+The doSettingService($action, $value = NULL) method is used to retrieve, save and delete
+data in the tool consumer resource link.
+</p>
+<pre class="brush: php;">
+$setting = $resource_link->doSettingService(LTI_Resource_Link::EXT_READ);
+</pre>
+<p>
+Note that the setting value may also be obtained from the settings of the
+LTI_Resource_Link (use thegetSetting('ext_ims_lti_tool_setting') call).  This value is automatically
+updated whenever a new setting is saved.
+</p>
+
+<pre class="brush: php;">
+$setting = 'Please remember this ...';
+$ok = $resource_link->doSettingService(LTI_Resource_Link::EXT_WRITE, $setting);
+</pre>
+
+<pre class="brush: php;">
+$ok = $resource_link->doSettingService(LTI_Resource_Link::EXT_DELETE);
+</pre>
+
+</div>
+
+
+<h2 class="showhide">Version history</h2>
+
+<div class="indent">
+
+<table class="tabular">
+
+<tr>
+  VersionDateDescription
+</tr>
+
+<tbody>
+<tr>
+  <td class="aligncentre">2.0.00</td><td>30&nbsp;June&nbsp;2012</td><td>First public release</td>
+</tr>
+<tr>
+  <td class="aligncentre">2.1.00</td><td>3&nbsp;July&nbsp;2012</td>
+  <td>
+    New fields added to lti_consumer table to add an option to link a consumer key to a tool consumer GUID and record the day of last access<br />
+    Enabled name of a bespoke data connector to be specified in addition to a database connection object
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.2.00</td><td>16&nbsp;October&nbsp;2012</td>
+  <td>
+    Added option to return parameters sent in last extension request<br />
+    Now released under GNU Lesser General Public License, version 3
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.3.00</td><td>2&nbsp;January&nbsp;2013</td>
+  <td>
+    Removed autoEnable property from LTI_Tool_Provider class (including constructor parameter)<br />
+    Added LTI_Tool_Provider->setParameterConstraint() method<br />
+    Changed references to $_REQUEST to $_POST<br />
+    Added LTI_Tool_Consumer->getIsAvailable() method<br />
+    Deprecated LTI_Context (use LTI_Resource_Link instead), other references to Context deprecated in favour of Resource_Link<br />
+    Settings values in lti_context table now saved as JSON (but still reads old format)
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.3.01</td><td>2&nbsp;February&nbsp;2013</td>
+  <td>
+    Added error callback option to LTI_Tool_Provider class<br />
+    Fixed typo in setParameterConstraint function<br />
+    Updated to use latest release of OAuth dependent library<br />
+    Added message property to LTI_Tool_Provider class to override default message returned on error
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.3.02</td><td>18&nbsp;April&nbsp;2013</td>
+  <td>
+    Tightened up checking of roles - now case sensitive and checks fully qualified URN<br />
+    Fixed bug with not updating a resource link before redirecting to a shared resource link
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.3.03</td><td>5&nbsp;June&nbsp;2013</td>
+  <td>
+    Altered order of checks in authenticate<br />
+    Fixed bug with LTI_Resource_Link->doOutcomesService when a resource link is shared with a different tool consumer<br />
+    Separated LTI_User from LTI_Outcome object<br />
+    Fixed bug with returned outcome values of zero
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.3.04</td><td>13&nbsp;August&nbsp;2013</td>
+  <td>
+    Added support for nonce values longer than 32 characters. For example, some OAuth libraries base64 encode the 32 character value,
+    so to avoid extending the database field size, long values are base64 decoded and/or truncated to make them fit.
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.3.05</td><td>29&nbsp;July&nbsp;2014</td>
+  <td>
+    Added support for Oracle databases, content-item messages and launches from LTI 2 tool consumers.
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.3.06</td><td>5&nbsp;August&nbsp;2014</td>
+  <td>
+    Fixed bug with handling of CLOB fields in Oracle databases.
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.4.00</td><td>10&nbsp;April&nbsp;2015</td>
+  <td>
+    Added methods to LTI_Tool_Provider class which are called on a successful request for each message type;
+    use of named callback methods is deprecated<br />
+    Added methods for generating signed auto-submit forms for LTI messages<br />
+    Added classes for Content-item objects<br />
+    Added support for unofficial ConfigureLaunchRequest and DashboardRequest messages<br />
+    Oracle databases now supported using the native PHP OCI driver
+  </td>
+</tr>
+<tr>
+  <td class="aligncentre">2.5.00</td><td>20&nbsp;May&nbsp;2015</td>
+  <td>
+    Added LTI_HTTP_Message class to handle the sending of HTTP requests<br />
+    Added workflow for automatically assigning resource link ID on first launch of a content-item message created link<br />
+    Enhanced checking of parameter values<br />
+    Added mediaTypes and documentTargets properties to LTI_Tool_Provider class for ContentItemSelectionRequest messages
+  </td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+<h2 class="expanded">Licence</h2>
+
+<div class="indent">
+
+<p>
+<a rel="license" href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser General Public License</a>
+This work is written by Stephen Vickers and is released under a
+<a rel="license" href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser General Public Licence</a>.
+
+The LTI Tool Provider PHP classes are available for download from <a href="http://projects.oscelot.org/gf/project/php-basic-lti/">OSCELOT</a> where
+it is also possible to report bugs and submit feature requests.
+</p>
+
+</div>
+
+<hr class="footer" />
+<div>
+<a href="http://validator.w3.org/check?uri=referer">Valid XHTML 1.0 Strict</a>
+<div class="footer smalltext">
+Please report any errors with this website to the <a href="mailto:DELETE THIS PREFIX webmaster@spvsoftwareproducts.com">webmaster</a><br />
+This page was last modified on 20 May 2015
+</div>
+</div>
+</div>
+</body>
+</html>
+

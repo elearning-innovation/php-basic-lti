@@ -1,47 +1,4 @@
 <?php
-/**
- * LTI_Tool_Provider - PHP class to include in an external tool to handle connections with an LTI 1 compliant tool consumer
- * Copyright (C) 2013  Stephen P Vickers
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- *
- * Contact: stephen@spvsoftwareproducts.com
- *
- * Version history:
- *   2.0.00  30-Jun-12  Initial release (replacing version 1.1.01 of BasicLTI_Tool_Provider)
- *   2.1.00   3-Jul-12  Added option to restrict use of consumer key based on tool consumer GUID value
- *                      Added field to record day of last access for each consumer key
- *   2.2.00  16-Oct-12  Added option to return parameters sent in last extension request
- *                      Released under GNU Lesser General Public License, version 3
- *   2.3.00   2-Jan-13  Removed autoEnable property from LTI_Tool_Provider class (including constructor parameter)
- *                      Added LTI_Tool_Provider->setParameterConstraint() method
- *                      Changed references to $_REQUEST to $_POST
- *                      Added LTI_Tool_Consumer->getIsAvailable() method
- *                      Deprecated LTI_Context (use LTI_Resource_Link instead), other references to Context deprecated in favour of Resource_Link
- *   2.3.01   2-Feb-13  Added error callback option to LTI_Tool_Provider class
- *                      Fixed typo in setParameterConstraint function
- *                      Updated to use latest release of OAuth dependent library
- *                      Added message property to LTI_Tool_Provider class to override default message returned on error
- *   2.3.02  18-Apr-13  Tightened up checking of roles - now case sensitive and checks fully qualified URN
- *                      Fixed bug with not updating a resource link before redirecting to a shared resource link
- *   2.3.03   5-Jun-13  Altered order of checks in authenticate
- *                      Fixed bug with LTI_Resource_Link->doOutcomesService when a resource link is shared with a different tool consumer
- *                      Separated LTI_User from LTI_Outcome object
- *                      Fixed bug with returned outcome values of zero
- *   2.3.04  13-Aug-13  Ensure nonce values are no longer than 32 characters
- */
 
 /**
  * OAuth libaray file
