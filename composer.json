@@ -8,7 +8,8 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": "^8.2"
+    "php": "^8.2",
+    "ext-dom": "*"
   },
   "require-dev": {
     "laminas/laminas-coding-standard": "^2.3",

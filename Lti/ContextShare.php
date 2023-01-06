@@ -12,7 +12,6 @@ namespace Oscelot\Lti;
  */
 class ContextShare extends ResourceLinkShare
 {
-
     /**
      * Context ID value.
      *
@@ -26,7 +25,6 @@ class ContextShare extends ResourceLinkShare
      */
     public function __construct()
     {
-
         parent::__construct();
         $this->context_id = &$this->resource_link_id;
     }

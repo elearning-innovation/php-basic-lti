@@ -3,54 +3,57 @@
 namespace Oscelot\Lti;
 
 use AllowDynamicProperties;
+use DOMDocument;
+use Oscelot\OAuth\Consumer;
+use Oscelot\OAuth\Request;
+use Oscelot\OAuth\SignatureMethodHmacSha1;
 
 /**
  * Class to represent a tool consumer resource link
  */
 #[AllowDynamicProperties] class ResourceLink
 {
-
     /**
      * Read action.
      */
-    const EXT_READ = 1;
+    public const EXT_READ = 1;
     /**
      * Write (create/update) action.
      */
-    const EXT_WRITE = 2;
+    public const EXT_WRITE = 2;
     /**
      * Delete action.
      */
-    const EXT_DELETE = 3;
+    public const EXT_DELETE = 3;
 
     /**
      * Decimal outcome type.
      */
-    const EXT_TYPE_DECIMAL = 'decimal';
+    public const EXT_TYPE_DECIMAL = 'decimal';
     /**
      * Percentage outcome type.
      */
-    const EXT_TYPE_PERCENTAGE = 'percentage';
+    public const EXT_TYPE_PERCENTAGE = 'percentage';
     /**
      * Ratio outcome type.
      */
-    const EXT_TYPE_RATIO = 'ratio';
+    public const EXT_TYPE_RATIO = 'ratio';
     /**
      * Letter (A-F) outcome type.
      */
-    const EXT_TYPE_LETTER_AF = 'letteraf';
+    public const EXT_TYPE_LETTER_AF = 'letteraf';
     /**
      * Letter (A-F) with optional +/- outcome type.
      */
-    const EXT_TYPE_LETTER_AF_PLUS = 'letterafplus';
+    public const EXT_TYPE_LETTER_AF_PLUS = 'letterafplus';
     /**
      * Pass/fail outcome type.
      */
-    const EXT_TYPE_PASS_FAIL = 'passfail';
+    public const EXT_TYPE_PASS_FAIL = 'passfail';
     /**
      * Free text outcome type.
      */
-    const EXT_TYPE_TEXT = 'freetext';
+    public const EXT_TYPE_TEXT = 'freetext';
 
     /**
      * Context ID as supplied in the last connection request.
@@ -148,7 +151,6 @@ use AllowDynamicProperties;
      */
     public function initialise(): void
     {
-
         $this->lti_context_id = null;
         $this->lti_resource_id = null;
         $this->title = '';
@@ -169,7 +171,6 @@ use AllowDynamicProperties;
      */
     public function save()
     {
-
         $ok = $this->consumer->getDataConnector()->Resource_Link_save($this);
         if ($ok) {
             $this->settings_changed = false;
@@ -185,7 +186,6 @@ use AllowDynamicProperties;
      */
     public function delete()
     {
-
         return $this->consumer->getDataConnector()->Resource_Link_delete($this);
     }
 
@@ -196,7 +196,6 @@ use AllowDynamicProperties;
      */
     public function getConsumer()
     {
-
         return $this->consumer;
     }
 
@@ -207,7 +206,6 @@ use AllowDynamicProperties;
      */
     public function getKey()
     {
-
         return $this->consumer->getKey();
     }
 
@@ -218,7 +216,6 @@ use AllowDynamicProperties;
      */
     public function getId()
     {
-
         return $this->id;
     }
 
@@ -232,7 +229,6 @@ use AllowDynamicProperties;
      */
     public function getSetting($name, $default = '')
     {
-
         if (array_key_exists($name, $this->settings)) {
             $value = $this->settings[$name];
         } else {
@@ -250,7 +246,6 @@ use AllowDynamicProperties;
      */
     public function setSetting($name, $value = null)
     {
-
         $old_value = $this->getSetting($name);
         if ($value != $old_value) {
             if (!empty($value)) {
@@ -269,7 +264,6 @@ use AllowDynamicProperties;
      */
     public function getSettings()
     {
-
         return $this->settings;
     }
 
@@ -280,7 +274,6 @@ use AllowDynamicProperties;
      */
     public function saveSettings()
     {
-
         if ($this->settings_changed) {
             $ok = $this->save();
         } else {
@@ -293,11 +286,11 @@ use AllowDynamicProperties;
     /**
      * Check if the Outcomes service is supported.
      *
-     * @return boolean True if this resource link supports the Outcomes service (either the LTI 1.1 or extension service)
+     * @return bool True if this resource link supports the Outcomes service
+     *              (either the LTI 1.1 or extension service).
      */
     public function hasOutcomesService()
     {
-
         $url = $this->getSetting('ext_ims_lis_basic_outcome_url') . $this->getSetting('lis_outcome_service_url');
 
         return !empty($url);
@@ -310,7 +303,6 @@ use AllowDynamicProperties;
      */
     public function hasMembershipsService()
     {
-
         $url = $this->getSetting('ext_ims_lis_memberships_url');
 
         return !empty($url);
@@ -323,7 +315,6 @@ use AllowDynamicProperties;
      */
     public function hasSettingService()
     {
-
         $url = $this->getSetting('ext_ims_lti_tool_setting_url');
 
         return !empty($url);
@@ -340,7 +331,6 @@ use AllowDynamicProperties;
      */
     public function doOutcomesService($action, $lti_outcome, $user = null)
     {
-
         $response = false;
         $this->ext_response = null;
         #
@@ -594,7 +584,6 @@ EOF;
      */
     public function doSettingService($action, $value = null)
     {
-
         $response = false;
         $this->ext_response = null;
         switch ($action) {
@@ -645,43 +634,47 @@ EOF;
     /**
      * Obtain an array of User objects for users with a result sourcedId.
      *
-     * The array may include users from other resource links which are sharing this resource link.
-     * It may also be optionally indexed by the user ID of a specified scope.
+     * The array may include users from other resource links which are sharing
+     * this resource link. It may also be optionally indexed by the user ID of a
+     * specified scope.
      *
-     * @param boolean $local_only True if only users from this resource link are to be returned, not users from shared resource links (optional, default is false)
-     * @param int     $id_scope     Scope to use for ID values (optional, default is null for consumer default)
+     * @param bool $local_only True if only users from this resource link are to
+     *                         be returned, not users from shared resource links
+     *                         (optional, default is false).
+     * @param int|null $id_scope Scope to use for ID values (optional, default
+     *                           is null for consumer default).
      *
      * @return array Array of User objects
      */
-    public function getUserResultSourcedIDs($local_only = false, $id_scope = null)
-    {
-
-        return $this->consumer->getDataConnector()->Resource_Link_getUserResultSourcedIDs($this, $local_only, $id_scope);
+    public function getUserResultSourcedIDs(
+        bool $local_only = false,
+        int $id_scope = null
+    ): array {
+        return $this->consumer->getDataConnector()->Resource_Link_getUserResultSourcedIDs(
+            $this,
+            $local_only,
+            $id_scope
+        );
     }
 
     /**
-     * Get an array of ResourceLink_Share objects for each resource link which is sharing this context.
+     * Get an array of ResourceLink_Share objects for each resource link which
+     * is sharing this context.
      *
-     * @return array Array of ResourceLink_Share objects
+     * @return array Array of ResourceLink_Share objects.
      */
     public function getShares()
     {
-
         return $this->consumer->getDataConnector()->Resource_Link_getShares($this);
     }
-
-###
-###  PRIVATE METHODS
-###
 
     /**
      * Load the resource link from the database.
      *
      * @return boolean True if resource link was successfully loaded
      */
-    private function load()
+    private function load(): bool
     {
-
         $this->initialise();
         return $this->consumer->getDataConnector()->Resource_Link_load($this);
     }
@@ -689,17 +682,30 @@ EOF;
     /**
      * Convert data type of value to a supported type if possible.
      *
-     * @param LTI_Outcome $lti_outcome     Outcome object
-     * @param string[]    $supported_types Array of outcome types to be supported (optional, default is null to use supported types reported in the last launch for this resource link)
+     * @param Outcome       $lti_outcome     Outcome object
+     * @param string[]|null $supported_types Array of outcome types to be supported
+     *                                  (optional, default is null to use
+     *                                  supported types reported in the last
+     *                                  launch for this resource link).
      *
-     * @return boolean True if the type/value are valid and supported
+     * @return boolean True if the type/value are valid and supported.
      */
-    private function checkValueType($lti_outcome, $supported_types = null)
-    {
-
+    private function checkValueType(
+        Outcome $lti_outcome,
+        array $supported_types = null
+    ): bool {
         if (empty($supported_types)) {
-            $supported_types = explode(',', str_replace(' ', '', strtolower($this->getSetting('ext_ims_lis_resultvalue_sourcedids', self::EXT_TYPE_DECIMAL))));
+            $supported_types = explode(
+                ',',
+                str_replace(' ', '', strtolower(
+                    $this->getSetting(
+                        'ext_ims_lis_resultvalue_sourcedids',
+                        self::EXT_TYPE_DECIMAL
+                    )
+                ))
+            );
         }
+
         $type = $lti_outcome->type;
         $value = $lti_outcome->getValue();
         // Check whether the type is supported or there is no value
@@ -772,9 +778,8 @@ EOF;
      *
      * @return boolean True if the request successfully obtained a response
      */
-    private function doService($type, $url, $params)
+    private function doService($type, $url, $params): bool
     {
-
         $this->ext_response = null;
         if (!empty($url)) {
             // Check for query parameters which need to be included in the signature
@@ -837,9 +842,11 @@ EOF;
      *
      * @return boolean True if the request successfully obtained a response
      */
-    private function doLTI11Service($type, $url, $xml)
-    {
-
+    private function doLTI11Service(
+        string $type,
+        string $url,
+        string $xml
+    ): bool {
         $this->ext_response = null;
         if (!empty($url)) {
             $id = uniqid();
@@ -864,9 +871,9 @@ EOF;
             $params = array('oauth_body_hash' => $hash);
 
             // Add OAuth signature
-            $hmac_method = new OAuthSignatureMethod_HMAC_SHA1();
-            $consumer = new OAuthConsumer($this->consumer->getKey(), $this->consumer->secret, null);
-            $req = OAuthRequest::from_consumer_and_token($consumer, null, 'POST', $url, $params);
+            $hmac_method = new SignatureMethodHmacSha1();
+            $consumer = new Consumer($this->consumer->getKey(), $this->consumer->secret, null);
+            $req = Request::from_consumer_and_token($consumer, null, 'POST', $url, $params);
             $req->sign_request($hmac_method, $consumer, null);
             $params = $req->get_parameters();
             $header = $req->to_header();

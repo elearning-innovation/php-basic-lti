@@ -9,7 +9,6 @@ namespace Oscelot\Lti;
  */
 class ConsumerNonce
 {
-
     /**
      * Maximum age nonce values will be retained for (in minutes).
      */
@@ -42,7 +41,6 @@ class ConsumerNonce
      */
     public function __construct($consumer, $value = null)
     {
-
         $this->consumer = $consumer;
         if (!is_null($value)) {
             if (strlen($value) > self::MAX_NONCE_LENGTH) {
@@ -66,7 +64,6 @@ class ConsumerNonce
      */
     public function load()
     {
-
         return $this->consumer->getDataConnector()->Consumer_Nonce_load($this);
     }
 
@@ -77,7 +74,6 @@ class ConsumerNonce
      */
     public function save()
     {
-
         return $this->consumer->getDataConnector()->Consumer_Nonce_save($this);
     }
 
@@ -88,7 +84,6 @@ class ConsumerNonce
      */
     public function getConsumer()
     {
-
         return $this->consumer;
     }
 
@@ -97,20 +92,18 @@ class ConsumerNonce
      *
      * @return string Consumer key value
      */
-    public function getKey()
+    public function getKey(): string
     {
-
         return $this->consumer->getKey();
     }
 
     /**
      * Get outcome value.
      *
-     * @return string Outcome value
+     * @return ?string Outcome value.
      */
-    public function getValue()
+    public function getValue(): ?string
     {
-
         return $this->value;
     }
 }

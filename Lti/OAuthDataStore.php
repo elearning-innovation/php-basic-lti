@@ -13,7 +13,6 @@ use Oscelot\OAuth\Token;
  */
 class OAuthDataStore extends AbstractDataStore
 {
-
     /**
      * ToolProvider object.
      */
@@ -26,7 +25,6 @@ class OAuthDataStore extends AbstractDataStore
      */
     public function __construct($tool_provider)
     {
-
         $this->tool_provider = $tool_provider;
     }
 
@@ -39,7 +37,6 @@ class OAuthDataStore extends AbstractDataStore
      */
     function lookup_consumer($consumer_key)
     {
-
         return new Consumer(
             $this->tool_provider->consumer->getKey(),
             $this->tool_provider->consumer->secret
@@ -72,7 +69,6 @@ class OAuthDataStore extends AbstractDataStore
      */
     function lookup_nonce($consumer, $token, $value, $timestamp)
     {
-
         $nonce = new ConsumerNonce($this->tool_provider->consumer, $value);
         $ok = !$nonce->load();
         if ($ok) {

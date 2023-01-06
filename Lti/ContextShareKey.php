@@ -12,7 +12,6 @@ namespace Oscelot\Lti;
  */
 class ContextShareKey extends ResourceLinkShareKey
 {
-
     /**
      * ID for context being shared.
      *
@@ -29,7 +28,6 @@ class ContextShareKey extends ResourceLinkShareKey
      */
     public function __construct($resource_link, $id = null)
     {
-
         parent::__construct($resource_link, $id);
         $this->primary_context_id = &$this->primary_resource_link_id;
     }

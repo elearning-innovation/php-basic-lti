@@ -14,7 +14,6 @@ namespace Oscelot\Lti;
  */
 class Context extends ResourceLink
 {
-
     /**
      * ID value for context being shared (if any).
      *
@@ -31,7 +30,6 @@ class Context extends ResourceLink
      */
     public function __construct($consumer, $id)
     {
-
         parent::__construct($consumer, $id);
         $this->primary_context_id = &$this->primary_resource_link_id;
     }
