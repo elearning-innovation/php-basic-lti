@@ -42,22 +42,22 @@ class User
     /**
      * User's result sourcedid.
      */
-    public $lti_result_sourcedid = null;
+    public mixed $lti_result_sourcedid = null;
 
     /**
      * Date/time the record was created.
      */
-    public $created = null;
+    public mixed $created = null;
 
     /**
      * Date/time the record was last updated.
      */
-    public $updated = null;
+    public mixed $updated = null;
 
     /**
      * ResourceLink object.
      */
-    private $resource_link = null;
+    private ?ResourceLink $resource_link;
 
      /**
      * LTI_Context object.
@@ -67,7 +67,7 @@ class User
     /**
      * User ID value.
      */
-    private ?string $id = null;
+    private ?string $id;
 
     /**
      * Class constructor.
@@ -79,6 +79,7 @@ class User
     {
         $this->initialise();
         $this->resource_link = $resource_link;
+        /** @noinspection UnusedConstructorDependenciesInspection */
         $this->context = &$this->resource_link;
         $this->id = $id;
         $this->load();
@@ -102,13 +103,11 @@ class User
 
     /**
      * Load the user from the database.
-     *
-     * @return bool True if the user object was successfully loaded
      */
-    public function load(): bool
+    public function load(): void
     {
         $this->initialise();
-        $this->resource_link->getConsumer()->getDataConnector()->User_load($this);
+        $this->resource_link->getConsumer()?->getDataConnector()->User_load($this);
     }
 
     /**
@@ -119,7 +118,7 @@ class User
     public function save(): bool
     {
         if (!empty($this->lti_result_sourcedid)) {
-            $ok = $this->resource_link->getConsumer()->getDataConnector()->User_save($this);
+            $ok = $this->resource_link->getConsumer()?->getDataConnector()->User_save($this);
         } else {
             $ok = true;
         }
@@ -134,7 +133,7 @@ class User
      */
     public function delete(): bool
     {
-        return $this->resource_link->getConsumer()->getDataConnector()->User_delete($this);
+        return $this->resource_link->getConsumer()?->getDataConnector()->User_delete($this);
     }
 
     /**
@@ -150,12 +149,12 @@ class User
     /**
      * Get context.
      *
-     * @deprecated Use getResourceLink() instead
-     * @see User::getResourceLink()
-     *
      * @return ResourceLink Context object
+     * @noinspection PhpUnused*@see User::getResourceLink()
+     *
+     * @deprecated Use getResourceLink() instead
      */
-    public function getContext()
+    public function getContext(): ResourceLink
     {
         return $this->resource_link;
     }
@@ -239,10 +238,10 @@ class User
     /**
      * Set the user's email address.
      *
-     * @param string $email        Email address value
-     * @param string $defaultEmail Value to use if no email is provided (optional, default is none)
+     * @param string      $email        Email address value
+     * @param ?string $defaultEmail Value to use if no email is provided (optional, default is none)
      */
-    public function setEmail($email, $defaultEmail = null): void
+    public function setEmail(string $email, ?string $defaultEmail = null): void
     {
         if (!empty($email)) {
             $this->email = $email;
@@ -260,8 +259,9 @@ class User
      * Check if the user is an administrator (at any of the system, institution or context levels).
      *
      * @return bool True if the user has a role of administrator
+     * @noinspection PhpUnused
      */
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->hasRole('Administrator')
             || $this->hasRole('urn:lti:sysrole:ims/lis/SysAdmin')
@@ -288,8 +288,7 @@ class User
      *
      * @return bool True if the user has a role of learner
      */
-    public function isLearner()
-    {
+    public function isLearner(): bool {
         return $this->hasRole('Learner');
     }
 
@@ -300,7 +299,7 @@ class User
      *
      * @return bool True if the user has the specified role
      */
-    private function hasRole($role)
+    private function hasRole(string $role): bool
     {
         if (substr($role, 0, 4) != 'urn:') {
             $role = 'urn:lti:role:ims/lis/' . $role;
