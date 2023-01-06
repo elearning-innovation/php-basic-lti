@@ -4,6 +4,7 @@ namespace Oscelot\Lti;
 
 use AllowDynamicProperties;
 use DOMDocument;
+use Exception;
 use Oscelot\OAuth\Consumer;
 use Oscelot\OAuth\Request;
 use Oscelot\OAuth\SignatureMethodHmacSha1;
@@ -904,15 +905,16 @@ EOF;
     /**
      * Get the response from an HTTP POST request.
      *
-     * @param string $url    URL to send request to
-     * @param array  $params Associative array of parameter values to be passed
-     * @param string $header Values to include in the request header (optional, default is none)
-     *
-     * @return string response contents, empty if the request was not successfull
+     * @param string      $url    URL to send request to.
+     * @param array       $params Associative array of parameter values to be passed.
+     * @param ?string $header Values to include in the request header (optional, default is none).
+     * @return string response contents, empty if the request was not successful.
      */
-    private function do_post_request($url, $params, $header = null)
-    {
-
+    private function do_post_request(
+        string $url,
+        array $params,
+        ?string $header = null
+    ): string {
         $ok = false;
         if (is_array($params)) {
             $data = http_build_query($params);
