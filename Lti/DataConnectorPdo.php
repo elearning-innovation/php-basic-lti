@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Oscelot\Lti;
 
-use JsonException;
+use \JsonException;
 
 class DataConnectorPdo extends AbstractDataConnector
 {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Oscelot\Lti;
 
 /**
@@ -20,15 +22,15 @@ class Context extends ResourceLink
      * @deprecated Use primary_resource_link_id instead
      * @see ResourceLink::$primary_resource_link_id
      */
-    public $primary_context_id = null;
+    public mixed $primary_context_id = null;
 
     /**
      * Class constructor.
      *
-     * @param string $consumer Consumer key value
+     * @param ?ToolConsumer $consumer Consumer key value
      * @param string $id       Resource link ID value
      */
-    public function __construct($consumer, $id)
+    public function __construct(?ToolConsumer $consumer, string $id)
     {
         parent::__construct($consumer, $id);
         $this->primary_context_id = &$this->primary_resource_link_id;

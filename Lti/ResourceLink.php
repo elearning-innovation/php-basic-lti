@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Oscelot\Lti;
 
 use AllowDynamicProperties;
@@ -68,12 +70,12 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Context ID as supplied in the last connection request.
      */
-    public $lti_context_id = null;
+    public mixed $lti_context_id = null;
 
     /**
      * Resource link ID as supplied in the last connection request.
      */
-    public $lti_resource_id = null;
+    public mixed $lti_resource_id = null;
 
     /**
      * Context title.
@@ -158,10 +160,10 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Class constructor.
      *
-     * @param ToolConsumer $consumer Consumer key value
+     * @param ?ToolConsumer $consumer Consumer key value
      * @param string $id       Resource link ID value
      */
-    public function __construct($consumer, $id)
+    public function __construct(?ToolConsumer $consumer, string $id)
     {
         $this->consumer = $consumer;
         $this->id = $id;
