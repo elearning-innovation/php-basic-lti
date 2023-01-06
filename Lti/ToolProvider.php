@@ -14,39 +14,62 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
  */
 class ToolProvider
 {
-    public const CONNECTION_ERROR_MESSAGE = 'Sorry, there was an error connecting you to the application.';
+    public const CONNECTION_ERROR_MESSAGE = 'Sorry, there was an error
+        connecting you to the application.';
 
-    // LTI version for messages.
+    /**
+     * LTI version for messages.
+     */
     public const LTI_VERSION = 'LTI-1p0';
 
-    // Use ID value only.
+    /**
+     * Use ID value only.
+     */
     public const ID_SCOPE_ID_ONLY = 0;
 
-    //Prefix an ID with the consumer key.
+    /**
+     * Prefix an ID with the consumer key.
+     */
     public const ID_SCOPE_GLOBAL = 1;
 
-    // Prefix the ID with the consumer key and context ID.
+    /**
+     * Prefix the ID with the consumer key and context ID.
+     */
     public const ID_SCOPE_CONTEXT = 2;
 
-    // Prefix the ID with the consumer key and resource ID.
+    /**
+     * Prefix the ID with the consumer key and resource ID.
+     */
     public const ID_SCOPE_RESOURCE = 3;
 
-    // Character used to separate each element of an ID.
+    /**
+     * Character used to separate each element of an ID.
+     */
     public const ID_SCOPE_SEPARATOR = ':';
 
-    // True if the last request was successful.
+    /**
+     * @var bool True if the last request was successful.
+     */
     public bool $isOK = true;
 
-    // ToolConsumer object.
+    /**
+     * @var ?ToolConsumer ToolConsumer object.
+     */
     public ?ToolConsumer $consumer = null;
 
-    // Return URL provided by tool consumer.
+    /**
+     * @var ?string Return URL provided by tool consumer.
+     */
     public ?string $return_url = null;
 
-    // User object.
+    /**
+     * @var ?User User object.
+     */
     public ?User $user = null;
 
-    // ResourceLink object.
+    /**
+     * @var ?ResourceLink ResourceLink object.
+     */
     public ?ResourceLink $resource_link = null;
 
     /**
@@ -57,40 +80,69 @@ class ToolProvider
 
     public ?AbstractDataConnector $data_connector = null;
 
-    // Default email domain.
+    /**
+     * @var string Default email domain.
+     */
     public string $defaultEmail = '';
 
-    // Scope to use for user IDs.
+    /**
+     * @var int Scope to use for user IDs.
+     */
     public int $id_scope = self::ID_SCOPE_ID_ONLY;
 
-    // True if shared resource link arrangements are permitted.
+    /**
+     * @var bool True if shared resource link arrangements are permitted.
+     */
     public bool $allowSharing = false;
 
-    // Message for last request processed.
+    /**
+     * @var ?string Message for last request processed.
+     */
     public ?string $message = self::CONNECTION_ERROR_MESSAGE;
 
-    // Error message for last request processed.
+    /**
+     * @var ?string Error message for last request processed.
+     */
     public ?string $reason = null;
 
-    // URL to redirect user to on successful completion of the request.
+    /**
+     * @var ?string URL to redirect user to on successful completion of the
+     *              request.
+     */
     private ?string $redirectURL = null;
 
-    // Callback functions for handling requests.
+    /**
+     * @var ?array Callback functions for handling requests.
+     */
     private ?array $callbackHandler = null;
 
-    // HTML to be displayed on successful completion of the request.
+    /**
+     * @var ?string HTML to be displayed on successful completion of the
+     *              request.
+     */
     private ?string $output = null;
 
-    // URL to redirect user to if the request is not successful.
+    /**
+     * @var ?string URL to redirect user to if the request is not successful.
+     */
     private ?string $error = null;
 
-    // True if debug messages explaining the cause of errors are to be returned to the tool consumer.
+    /**
+     * @var bool True if debug messages explaining the cause of errors are to be
+     *           returned to the tool consumer.
+     */
     private bool $debugMode = false;
 
-    // Array of LTI parameter constraints for auto validation checks.
+    /**
+     * @var ?array Array of LTI parameter constraints for auto validation
+     *             checks.
+     */
     private ?array $constraints = null;
 
-    // Names of LTI parameters to be retained in the settings property.
+    /**
+     * @var array|string[] Names of LTI parameters to be retained in the
+     *                     settings property.
+     */
     private array $lti_settings_names = [
         'ext_resource_link_content',
         'ext_resource_link_content_signature',
@@ -117,9 +169,10 @@ class ToolProvider
      *                               containing one or both values (optional,
      *                               default is a blank prefix and MySQL).
      */
-    public function __construct(mixed $callbackHandler, mixed $data_connector = '')
-    {
-
+    public function __construct(
+        mixed $callbackHandler,
+        mixed $data_connector = ''
+    ) {
         if (!is_array($callbackHandler)) {
             $this->callbackHandler['connect'] = $callbackHandler;
         } elseif (isset($callbackHandler['connect'])) {
@@ -141,7 +194,9 @@ class ToolProvider
     public function execute(): void
     {
         // Initialise data connector
-        $this->data_connector = AbstractDataConnector::getDataConnector($this->data_connector);
+        $this->data_connector = AbstractDataConnector::getDataConnector(
+            $this->data_connector
+        );
 
         // Set return URL if available
         if (isset($_POST['launch_presentation_return_url'])) {
@@ -167,10 +222,13 @@ class ToolProvider
         string $name,
         bool $required,
         ?int $max_length = null
-    ) {
+    ): void {
         $name = trim($name);
         if (strlen($name) > 0) {
-            $this->constraints[$name] = array('required' => $required, 'max_length' => $max_length);
+            $this->constraints[$name] = [
+                'required' => $required,
+                'max_length' => $max_length
+            ];
         }
     }
 
@@ -182,7 +240,9 @@ class ToolProvider
     public function getConsumers(): array
     {
         // Initialise data connector
-        $this->data_connector = AbstractDataConnector::getDataConnector($this->data_connector);
+        $this->data_connector = AbstractDataConnector::getDataConnector(
+            $this->data_connector
+        );
 
         return $this->data_connector->Tool_Consumer_list();
     }
@@ -225,7 +285,9 @@ class ToolProvider
 
             // Callback function may return HTML, a redirect URL, or a bool value
             if (is_string($result)) {
-                if ((substr($result, 0, 7) == 'http://') || (substr($result, 0, 8) == 'https://')) {
+                if ((substr($result, 0, 7) == 'http://')
+                    || (substr($result, 0, 8) == 'https://')
+                ) {
                     $this->redirectURL = $result;
                 } else {
                     if (is_null($this->output)) {
@@ -242,21 +304,22 @@ class ToolProvider
     /**
      * Perform the result of an action.
      *
-     * This function may redirect the user to another URL rather than returning a value.
+     * This function may redirect the user to another URL rather than returning
+     * a value.
      *
-     * @return string Output to be displayed (redirection, or display HTML or message)
+     * @return void Output to be displayed (redirection, or display HTML or
+     *              message).
      */
-    private function result(): string {
-
+    private function result(): void
+    {
         $ok = false;
         if (!$this->isOK && isset($this->callbackHandler['error'])) {
             $ok = call_user_func($this->callbackHandler['error'], $this);
         }
         if (!$ok) {
             if (!$this->isOK) {
-      #
-      ### If not valid, return an error message to the tool consumer if a return URL is provided
-      #
+                // If not valid, return an error message to the tool consumer if
+                // a return URL is provided.
                 if (!empty($this->return_url)) {
                     $this->error = $this->return_url;
                     if (strpos($this->error, '?') === false) {
@@ -278,7 +341,9 @@ class ToolProvider
                 if (is_null($this->error)) {
                     $this->error = $this->message;
                 }
-                if ((substr($this->error, 0, 7) == 'http://') || (substr($this->error, 0, 8) == 'https://')) {
+                if ((substr($this->error, 0, 7) == 'http://')
+                    || (substr($this->error, 0, 8) == 'https://')
+                ) {
                     header("Location: {$this->error}");
                 } else {
                     echo "Error: {$this->error}";
@@ -294,14 +359,16 @@ class ToolProvider
     /**
      * Check the authenticity of the LTI launch request.
      *
-     * The consumer, resource link and user objects will be initialised if the request is valid.
+     * The consumer, resource link and user objects will be initialised if the
+     * request is valid.
      *
      * @return bool True if the request has been successfully validated.
      */
     private function authenticate(): bool
     {
         // Set debug mode.
-        $this->debugMode = isset($_POST['custom_debug']) && (strtolower($_POST['custom_debug']) == 'true');
+        $this->debugMode = isset($_POST['custom_debug'])
+            && (strtolower($_POST['custom_debug']) == 'true');
 
         // Get the consumer
         $doSaveConsumer = false;
@@ -309,18 +376,25 @@ class ToolProvider
         // Check all required launch parameter constraints
         $this->isOK = isset($_POST['oauth_consumer_key']);
         if ($this->isOK) {
-            $this->isOK = isset($_POST['lti_message_type']) && ($_POST['lti_message_type'] == 'basic-lti-launch-request');
+            $this->isOK = isset($_POST['lti_message_type'])
+                && ($_POST['lti_message_type'] == 'basic-lti-launch-request');
         }
         if ($this->isOK) {
-            $this->isOK = isset($_POST['lti_version']) && ($_POST['lti_version'] == self::LTI_VERSION);
+            $this->isOK = isset($_POST['lti_version'])
+                && ($_POST['lti_version'] == self::LTI_VERSION);
         }
         if ($this->isOK) {
-            $this->isOK = isset($_POST['resource_link_id']) && (strlen(trim($_POST['resource_link_id'])) > 0);
+            $this->isOK = isset($_POST['resource_link_id'])
+                && (strlen(trim($_POST['resource_link_id'])) > 0);
         }
 
         // Check consumer key
         if ($this->isOK) {
-            $this->consumer = new ToolConsumer($_POST['oauth_consumer_key'], $this->data_connector);
+            $this->consumer = new ToolConsumer(
+                $_POST['oauth_consumer_key'],
+                $this->data_connector
+            );
+
             $this->isOK = !is_null($this->consumer->created);
             if ($this->debugMode && !$this->isOK) {
                 $this->reason = 'Invalid consumer key.';
@@ -343,7 +417,7 @@ class ToolProvider
                 $server->add_signature_method($method);
                 $request = Request::from_request();
                 $res = $server->verify_request($request);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 $this->isOK = false;
                 if (empty($this->reason)) {
                     $this->reason = 'OAuth signature check failed - perhaps an incorrect secret or timestamp.';
@@ -373,9 +447,11 @@ class ToolProvider
             }
         }
         if ($this->isOK) {
-            $this->isOK = is_null($this->consumer->enable_from) || ($this->consumer->enable_from <= $now);
+            $this->isOK = is_null($this->consumer->enable_from)
+                || ($this->consumer->enable_from <= $now);
             if ($this->isOK) {
-                $this->isOK = is_null($this->consumer->enable_until) || ($this->consumer->enable_until > $now);
+                $this->isOK = is_null($this->consumer->enable_until)
+                    || ($this->consumer->enable_until > $now);
                 if ($this->debugMode && !$this->isOK) {
                     $this->reason = 'Tool consumer access has expired.';
                 }
@@ -390,12 +466,17 @@ class ToolProvider
             foreach ($this->constraints as $name => $constraint) {
                 $ok = true;
                 if ($constraint['required']) {
-                    if (!isset($_POST[$name]) || (strlen(trim($_POST[$name])) <= 0)) {
+                    if (!isset($_POST[$name])
+                        || (strlen(trim($_POST[$name])) <= 0)
+                    ) {
                         $invalid_parameters[] = $name;
                         $ok = false;
                     }
                 }
-                if ($ok && !is_null($constraint['max_length']) && isset($_POST[$name])) {
+                if ($ok
+                    && !is_null($constraint['max_length'])
+                    && isset($_POST[$name])
+                ) {
                     if (strlen(trim($_POST[$name])) > $constraint['max_length']) {
                         $invalid_parameters[] = $name;
                     }
@@ -404,26 +485,38 @@ class ToolProvider
             if (count($invalid_parameters) > 0) {
                 $this->isOK = false;
                 if (empty($this->reason)) {
-                    $this->reason = 'Invalid parameter(s): ' . implode(', ', $invalid_parameters) . '.';
+                    $this->reason = 'Invalid parameter(s): '
+                        . implode(', ', $invalid_parameters) . '.';
                 }
             }
         }
 
         if ($this->isOK) {
             $this->consumer->defaultEmail = $this->defaultEmail;
-    #
-    ### Set the request context/resource link
-    #
-            $this->resource_link = new ResourceLink($this->consumer, trim($_POST['resource_link_id']));
+
+            // Set the request context/resource link
+            $this->resource_link = new ResourceLink(
+                $this->consumer,
+                trim($_POST['resource_link_id'])
+            );
+
             if (isset($_POST['context_id'])) {
-                $this->resource_link->lti_context_id = trim($_POST['context_id']);
+                $this->resource_link->lti_context_id = trim(
+                    $_POST['context_id']
+                );
             }
-            $this->resource_link->lti_resource_id = trim($_POST['resource_link_id']);
+
+            $this->resource_link->lti_resource_id = trim(
+                $_POST['resource_link_id']
+            );
+
             $title = '';
             if (isset($_POST['context_title'])) {
                 $title = trim($_POST['context_title']);
             }
-            if (isset($_POST['resource_link_title']) && (strlen(trim($_POST['resource_link_title'])) > 0)) {
+            if (isset($_POST['resource_link_title'])
+                && (strlen(trim($_POST['resource_link_title'])) > 0)
+            ) {
                 if (!empty($title)) {
                     $title .= ': ';
                 }
@@ -432,8 +525,9 @@ class ToolProvider
             if (empty($title)) {
                 $title = "Course {$this->resource_link->getId()}";
             }
+
             $this->resource_link->title = $title;
-    // Save LTI parameters
+            // Save LTI parameters
             foreach ($this->lti_settings_names as $name) {
                 if (isset($_POST[$name])) {
                     $this->resource_link->setSetting($name, $_POST[$name]);
@@ -441,47 +535,45 @@ class ToolProvider
                     $this->resource_link->setSetting($name, null);
                 }
             }
-    // Delete any existing custom parameters
+
+            // Delete any existing custom parameters
             foreach ($this->resource_link->getSettings() as $name => $value) {
                 if (strpos($name, 'custom_') === 0) {
                     $this->resource_link->setSetting($name);
                 }
             }
-    // Save custom parameters
+
+            // Save custom parameters
             foreach ($_POST as $name => $value) {
                 if (strpos($name, 'custom_') === 0) {
                     $this->resource_link->setSetting($name, $value);
                 }
             }
-    #
-    ### Set the user instance
-    #
+
+            // Set the user instance
             $user_id = '';
             if (isset($_POST['user_id'])) {
                 $user_id = trim($_POST['user_id']);
             }
+
             $this->user = new User($this->resource_link, $user_id);
-    #
-    ### Set the user name
-    #
-            $firstname = (isset($_POST['lis_person_name_given'])) ? $_POST['lis_person_name_given'] : '';
-            $lastname = (isset($_POST['lis_person_name_family'])) ? $_POST['lis_person_name_family'] : '';
-            $fullname = (isset($_POST['lis_person_name_full'])) ? $_POST['lis_person_name_full'] : '';
+
+            // Set the user name
+            $firstname = $_POST['lis_person_name_given'] ?? '';
+            $lastname = $_POST['lis_person_name_family'] ?? '';
+            $fullname = $_POST['lis_person_name_full'] ?? '';
             $this->user->setNames($firstname, $lastname, $fullname);
-    #
-    ### Set the user email
-    #
-            $email = (isset($_POST['lis_person_contact_email_primary'])) ? $_POST['lis_person_contact_email_primary'] : '';
+
+            // Set the user email
+            $email = $_POST['lis_person_contact_email_primary'] ?? '';
             $this->user->setEmail($email, $this->defaultEmail);
-    #
-    ### Set the user roles
-    #
+
+            // Set the user roles
             if (isset($_POST['roles'])) {
                 $this->user->roles = self::parseRoles($_POST['roles']);
             }
-    #
-    ### Save the user instance
-    #
+
+            // Save the user instance
             if (isset($_POST['lis_result_sourcedid'])) {
                 if ($this->user->lti_result_sourcedid != $_POST['lis_result_sourcedid']) {
                   // custom fix start
@@ -495,25 +587,26 @@ class ToolProvider
             } elseif (!empty($this->user->lti_result_sourcedid)) {
                 $this->user->delete();
             }
-    #
-    ### Initialise the consumer and check for changes
-    #
+
+            // Initialise the consumer and check for changes
             if ($this->consumer->lti_version != $_POST['lti_version']) {
                 $this->consumer->lti_version = $_POST['lti_version'];
                 $doSaveConsumer = true;
             }
+
             if (isset($_POST['tool_consumer_instance_name'])) {
                 if ($this->consumer->consumer_name != $_POST['tool_consumer_instance_name']) {
                     $this->consumer->consumer_name = $_POST['tool_consumer_instance_name'];
                     $doSaveConsumer = true;
                 }
             }
+
             if (isset($_POST['tool_consumer_info_product_family_code'])) {
                 $version = $_POST['tool_consumer_info_product_family_code'];
                 if (isset($_POST['tool_consumer_info_version'])) {
                     $version .= "-{$_POST['tool_consumer_info_version']}";
                 }
-      // do not delete any existing consumer version if none is passed
+                // do not delete any existing consumer version if none is passed
                 if ($this->consumer->consumer_version != $version) {
                     $this->consumer->consumer_version = $version;
                     $doSaveConsumer = true;
@@ -522,6 +615,7 @@ class ToolProvider
                 $this->consumer->consumer_version = $_POST['ext_lms'];
                 $doSaveConsumer = true;
             }
+
             if (isset($_POST['tool_consumer_instance_guid'])) {
                 if (is_null($this->consumer->consumer_guid)) {
                     $this->consumer->consumer_guid = $_POST['tool_consumer_instance_guid'];
@@ -533,6 +627,7 @@ class ToolProvider
                     }
                 }
             }
+
             if (isset($_POST['launch_presentation_css_url'])) {
                 if ($this->consumer->css_path != $_POST['launch_presentation_css_url']) {
                     $this->consumer->css_path = $_POST['launch_presentation_css_url'];
@@ -547,35 +642,30 @@ class ToolProvider
                 $doSaveConsumer = true;
             }
         }
-  #
-  ### Persist changes to consumer
-  #
+
+        // Persist changes to consumer
         if ($doSaveConsumer) {
             $this->consumer->save();
         }
 
         if ($this->isOK) {
-    #
-    ### Check if a share arrangement is in place for this resource link
-  #
+            // Check if a share arrangement is in place for this resource link
             $this->isOK = $this->checkForShare();
-  #
-  ### Persist changes to resource link
-  #
+
+            // Persist changes to resource link
             $this->resource_link->save();
         }
 
         return $this->isOK;
     }
 
-/**
- * Check if a share arrangement is in place.
- *
- * @return bool True if no error is reported
- */
-    private function checkForShare()
+    /**
+     * Check if a share arrangement is in place.
+     *
+     * @return bool True if no error is reported
+     */
+    private function checkForShare(): bool
     {
-
         $ok = true;
         $doSaveResourceLink = true;
 
@@ -588,10 +678,10 @@ class ToolProvider
                 $ok = false;
                 $this->reason = 'Your sharing request has been refused because sharing is not being permitted.';
             } else {
-      // Check if this is a new share key
+                // Check if this is a new share key
                 $share_key = new ResourceLinkShareKey($this->resource_link, $_POST['custom_share_key']);
                 if (!is_null($share_key->primary_consumer_key) && !is_null($share_key->primary_resource_link_id)) {
-          // Update resource link with sharing primary resource link details
+                    // Update resource link with sharing primary resource link details
                     $key = $share_key->primary_consumer_key;
                     $id = $share_key->primary_resource_link_id;
                     $ok = ($key != $this->consumer->getKey()) || ($id != $this->resource_link->getId());
@@ -620,7 +710,8 @@ class ToolProvider
                     if (!$ok) {
                         $this->reason = 'You have requested to share a resource link but none is available.';
                     } else {
-                        $ok = (!is_null($this->user->getResourceLink()->share_approved) && $this->user->getResourceLink()->share_approved);
+                        $ok = (!is_null($this->user->getResourceLink()->share_approved)
+                            && $this->user->getResourceLink()->share_approved);
                         if (!$ok) {
                             $this->reason = 'Your share request is waiting to be approved.';
                         }
@@ -628,14 +719,15 @@ class ToolProvider
                 }
             }
         } else {
-    // Check no share is in place
+            // Check no share is in place
             $ok = is_null($key);
             if (!$ok) {
-                $this->reason = 'You have not requested to share a resource link but an arrangement is currently in place.';
+                $this->reason = 'You have not requested to share a resource link
+                                but an arrangement is currently in place.';
             }
         }
 
-  // Look up primary resource link
+        // Look up primary resource link
         if ($ok && !is_null($key)) {
             $consumer = new ToolConsumer($key, $this->data_connector);
             $ok = !is_null($consumer->created);

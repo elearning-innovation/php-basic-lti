@@ -71,7 +71,7 @@ class ToolConsumer
     /**
      * Date of last connection from this tool consumer.
      */
-    public ?string $last_access = null;
+    public ?int $last_access = null;
 
     /**
      * Default scope to use when generating an Id value for a user.
