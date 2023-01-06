@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Oscelot\Lti;
 
-use Oscelot\Lti\DataConnectorPdo;
-
 /**
  * Abstract class to provide a connection to a persistent store for LTI objects
  */
@@ -73,7 +71,7 @@ abstract class AbstractDataConnector
      * @param ResourceLink $resource_link Resource_Link object.
      * @return bool True if the resource link object was successfully loaded.
      */
-    abstract public function Resource_Link_load(ResourceLink $resource_link);
+    abstract public function Resource_Link_load(ResourceLink $resource_link): bool;
 
     /**
      * Save resource link object.
@@ -127,7 +125,7 @@ abstract class AbstractDataConnector
      * @param ConsumerNonce $nonce Nonce object.
      * @return bool True if the nonce object was successfully loaded.
      */
-    abstract public function Consumer_Nonce_load(ConsumerNonce $nonce);
+    abstract public function Consumer_Nonce_load(ConsumerNonce $nonce): bool;
 
     /**
      * Save nonce object.
@@ -135,7 +133,7 @@ abstract class AbstractDataConnector
      * @param ConsumerNonce $nonce Nonce object.
      * @return bool True if the nonce object was successfully saved.
      */
-    abstract public function Consumer_Nonce_save(ConsumerNonce $nonce);
+    abstract public function Consumer_Nonce_save(ConsumerNonce $nonce): bool;
 
     /**
      * Load resource link share key object.
@@ -282,6 +280,7 @@ abstract class AbstractDataConnector
      */
     public static function getRandomString(int $length = 8): string
     {
+        /** @noinspection SpellCheckingInspection */
         $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
         $value = '';
@@ -307,6 +306,7 @@ abstract class AbstractDataConnector
      *                           single quotes (optional, default is true).
      *
      * @return null|bool|string True if the user object was successfully deleted.
+     * @noinspection PhpUnused
      */
     public static function quoted(
         ?string $value,
