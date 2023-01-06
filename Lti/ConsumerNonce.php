@@ -12,34 +12,34 @@ class ConsumerNonce
     /**
      * Maximum age nonce values will be retained for (in minutes).
      */
-    const MAX_NONCE_AGE = 30;  // in minutes
+    public const MAX_NONCE_AGE = 30;  // in minutes
 
     /**
      * Maximum size of a nonce value (in characters)
      */
-    const MAX_NONCE_LENGTH = 32;  // in characters
+    public const MAX_NONCE_LENGTH = 32;  // in characters
 
     /**
      * Date/time when the nonce value expires.
      */
-    public $expires = null;
+    public int|null|float $expires = null;
 
     /**
      * ToolConsumer object to which this nonce applies.
      */
-    private $consumer = null;
+    private ?ToolConsumer $consumer;
     /**
      * Nonce value.
      */
-    private $value = null;
+    private ?string $value;
 
     /**
      * Class constructor.
      *
-     * @param ToolConsumer $consumer Consumer object
-     * @param string            $value    Nonce value (optional, default is null)
+     * @param ToolConsumer $consumer Consumer object.
+     * @param ?string $value Nonce value (optional, default is null).
      */
-    public function __construct($consumer, $value = null)
+    public function __construct(ToolConsumer $consumer, ?string $value = null)
     {
         $this->consumer = $consumer;
         if (!is_null($value)) {
@@ -62,7 +62,7 @@ class ConsumerNonce
      *
      * @return bool True if the nonce value was successfully loaded
      */
-    public function load()
+    public function load(): bool
     {
         return $this->consumer->getDataConnector()->Consumer_Nonce_load($this);
     }
@@ -72,7 +72,7 @@ class ConsumerNonce
      *
      * @return bool True if the nonce value was successfully saved
      */
-    public function save()
+    public function save(): bool
     {
         return $this->consumer->getDataConnector()->Consumer_Nonce_save($this);
     }
@@ -80,9 +80,9 @@ class ConsumerNonce
     /**
      * Get tool consumer.
      *
-     * @return ToolConsumer Consumer for this nonce
+     * @return ?ToolConsumer Consumer for this nonce.
      */
-    public function getConsumer()
+    public function getConsumer(): ?ToolConsumer
     {
         return $this->consumer;
     }
