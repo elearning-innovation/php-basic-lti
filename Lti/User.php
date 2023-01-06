@@ -288,7 +288,8 @@ class User
      *
      * @return bool True if the user has a role of learner
      */
-    public function isLearner(): bool {
+    public function isLearner(): bool
+    {
         return $this->hasRole('Learner');
     }
 
