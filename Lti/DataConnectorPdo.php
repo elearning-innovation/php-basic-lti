@@ -423,7 +423,7 @@ class DataConnectorPdo extends AbstractDataConnector
 #    Obtain an array of User objects for users with a result sourcedId.  The array may include users from other
 #    resource links which are sharing this resource link.  It may also be optionally indexed by the user ID of a specified scope.
 ###
-    public function Resource_Link_getUserResultSourcedIDs($resource_link, $local_only, $id_scope): array
+    public function Resource_Link_getUserResultSourcedIDs($resource_link, bool $local_only, int $id_scope): array
     {
 
         $users = array();
@@ -503,7 +503,7 @@ class DataConnectorPdo extends AbstractDataConnector
 ###
 #    Load the consumer nonce from the database
 ###
-    public function Consumer_Nonce_load($nonce): bool
+    public function Consumer_Nonce_load(ConsumerNonce $nonce): bool
     {
 
 // Delete any expired nonce values
@@ -534,7 +534,7 @@ class DataConnectorPdo extends AbstractDataConnector
 ###
 #    Save the consumer nonce in the database
 ###
-    public function Consumer_Nonce_save($nonce): bool
+    public function Consumer_Nonce_save(ConsumerNonce $nonce): bool
     {
 
         $key = $nonce->getKey();

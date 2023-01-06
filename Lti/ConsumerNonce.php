@@ -60,7 +60,7 @@ class ConsumerNonce
     /**
      * Load a nonce value from the database.
      *
-     * @return boolean True if the nonce value was successfully loaded
+     * @return bool True if the nonce value was successfully loaded
      */
     public function load()
     {
@@ -70,7 +70,7 @@ class ConsumerNonce
     /**
      * Save a nonce value in the database.
      *
-     * @return boolean True if the nonce value was successfully saved
+     * @return bool True if the nonce value was successfully saved
      */
     public function save()
     {

@@ -130,7 +130,7 @@ class User
     /**
      * Delete the user from the database.
      *
-     * @return boolean True if the user object was successfully deleted
+     * @return bool True if the user object was successfully deleted
      */
     public function delete(): bool
     {
@@ -259,7 +259,7 @@ class User
     /**
      * Check if the user is an administrator (at any of the system, institution or context levels).
      *
-     * @return boolean True if the user has a role of administrator
+     * @return bool True if the user has a role of administrator
      */
     public function isAdmin()
     {
@@ -272,7 +272,7 @@ class User
     /**
      * Check if the user is staff.
      *
-     * @return boolean True if the user has a role of instructor, contentdeveloper or teachingassistant
+     * @return bool True if the user has a role of instructor, contentdeveloper or teachingassistant
      */
     public function isStaff(): bool
     {
@@ -286,7 +286,7 @@ class User
     /**
      * Check if the user is a learner.
      *
-     * @return boolean True if the user has a role of learner
+     * @return bool True if the user has a role of learner
      */
     public function isLearner()
     {
@@ -298,7 +298,7 @@ class User
      *
      * @param string $role Name of role
      *
-     * @return boolean True if the user has the specified role
+     * @return bool True if the user has the specified role
      */
     private function hasRole($role)
     {

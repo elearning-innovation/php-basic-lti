@@ -14,180 +14,185 @@ abstract class AbstractDataConnector
     /**
      * Default name for database table used to store tool consumers.
      */
-    const CONSUMER_TABLE_NAME = 'lti_consumer';
+    public const CONSUMER_TABLE_NAME = 'lti_consumer';
 
     /**
      * Default name for database table used to store resource links.
      */
-    const RESOURCE_LINK_TABLE_NAME = 'lti_context';
+    public const RESOURCE_LINK_TABLE_NAME = 'lti_context';
 
     /**
      * Default name for database table used to store users.
      */
-    const USER_TABLE_NAME = 'User';
+    public const USER_TABLE_NAME = 'User';
 
     /**
      * Default name for database table used to store resource link share keys.
      */
-    const RESOURCE_LINK_SHARE_KEY_TABLE_NAME = 'lti_share_key';
+    public const RESOURCE_LINK_SHARE_KEY_TABLE_NAME = 'lti_share_key';
 
     /**
      * Default name for database table used to store nonce values.
      */
-    const NONCE_TABLE_NAME = 'lti_nonce';
+    public const NONCE_TABLE_NAME = 'lti_nonce';
 
     /**
      * Load tool consumer object.
      *
-     * @param mixed $consumer ToolConsumer object
-     *
-     * @return boolean True if the tool consumer object was successfully loaded
+     * @param ToolConsumer $consumer ToolConsumer object.
+     * @return bool True if the tool consumer object was successfully loaded.
      */
-    abstract public function Tool_Consumer_load($consumer);
+    abstract public function Tool_Consumer_load(ToolConsumer $consumer): bool;
 
     /**
      * Save tool consumer object.
      *
-     * @param ToolConsumer $consumer Consumer object
-     *
-     * @return boolean True if the tool consumer object was successfully saved
+     * @param ToolConsumer $consumer Consumer object.
+     * @return bool True if the tool consumer object was successfully saved.
      */
-    abstract public function Tool_Consumer_save($consumer);
+    abstract public function Tool_Consumer_save(ToolConsumer $consumer): bool;
 
     /**
      * Delete tool consumer object.
      *
-     * @param ToolConsumer $consumer Consumer object
-     *
-     * @return boolean True if the tool consumer object was successfully deleted
+     * @param ToolConsumer $consumer Consumer object.
+     * @return bool True if the tool consumer object was successfully deleted.
      */
-    abstract public function Tool_Consumer_delete($consumer);
+    abstract public function Tool_Consumer_delete(ToolConsumer $consumer): bool;
 
     /**
      * Load tool consumer objects.
      *
-     * @return array Array of all defined ToolConsumer objects
+     * @return ToolConsumer[] Array of all defined ToolConsumer objects.
      */
-    abstract public function Tool_Consumer_list();
+    abstract public function Tool_Consumer_list(): array;
 
     /**
      * Load resource link object.
      *
-     * @param ResourceLink $resource_link Resource_Link object
-     *
-     * @return boolean True if the resource link object was successfully loaded
+     * @param ResourceLink $resource_link Resource_Link object.
+     * @return bool True if the resource link object was successfully loaded.
      */
-    abstract public function Resource_Link_load($resource_link);
+    abstract public function Resource_Link_load(ResourceLink $resource_link);
 
     /**
      * Save resource link object.
      *
-     * @param ResourceLink $resource_link Resource_Link object
-     *
-     * @return boolean True if the resource link object was successfully saved
+     * @param ResourceLink $resource_link Resource_Link object.
+     * @return bool True if the resource link object was successfully saved.
      */
-    abstract public function Resource_Link_save($resource_link);
+    abstract public function Resource_Link_save(
+        ResourceLink $resource_link
+    ): bool;
 
     /**
      * Delete resource link object.
      *
-     * @param ResourceLink $resource_link Resource_Link object
-     *
-     * @return boolean True if the Resource_Link object was successfully deleted
+     * @param ResourceLink $resource_link Resource_Link object.
+     * @return bool True if the Resource_Link object was successfully deleted.
      */
-    abstract public function Resource_Link_delete($resource_link);
+    abstract public function Resource_Link_delete(
+        ResourceLink $resource_link
+    ): bool;
 
     /**
      * Get array of user objects.
      *
-     * @param ResourceLink $resource_link      Resource link object
-     * @param boolean     $local_only True if only users within the resource link are to be returned (excluding users sharing this resource link)
-     * @param int         $id_scope     Scope value to use for user IDs
-     *
-     * @return array Array of User objects
+     * @param ResourceLink $resource_link Resource link object.
+     * @param bool         $local_only    True if only users within the resource link are
+     *                         to be returned (excluding users sharing this
+     *                         resource link).
+     * @param int          $id_scope      Scope value to use for user IDs.
+     * @return User[] Array of User objects.
      */
-    abstract public function Resource_Link_getUserResultSourcedIDs($resource_link, $local_only, $id_scope);
+    abstract public function Resource_Link_getUserResultSourcedIDs(
+        ResourceLink $resource_link,
+        bool $local_only,
+        int $id_scope
+    ): array;
 
     /**
      * Get array of shares defined for this resource link.
      *
-     * @param ResourceLink $resource_link Resource_Link object
-     *
-     * @return array Array of ResourceLink_Share objects
+     * @param ResourceLink $resource_link Resource_Link object.
+     * @return ResourceLinkShare[] Array of ResourceLinkShare objects.
      */
-    abstract public function Resource_Link_getShares($resource_link);
+    abstract public function Resource_Link_getShares(
+        ResourceLink $resource_link
+    ): array;
 
     /**
      * Load nonce object.
      *
-     * @param ConsumerNonce $nonce Nonce object
-     *
-     * @return boolean True if the nonce object was successfully loaded
+     * @param ConsumerNonce $nonce Nonce object.
+     * @return bool True if the nonce object was successfully loaded.
      */
-    abstract public function Consumer_Nonce_load($nonce);
+    abstract public function Consumer_Nonce_load(ConsumerNonce $nonce);
 
     /**
      * Save nonce object.
      *
-     * @param ConsumerNonce $nonce Nonce object
-     *
-     * @return boolean True if the nonce object was successfully saved
+     * @param ConsumerNonce $nonce Nonce object.
+     * @return bool True if the nonce object was successfully saved.
      */
-    abstract public function Consumer_Nonce_save($nonce);
+    abstract public function Consumer_Nonce_save(ConsumerNonce $nonce);
 
     /**
      * Load resource link share key object.
      *
-     * @param ResourceLinkShareKey $share_key Resource_Link share key object
-     *
-     * @return boolean True if the resource link share key object was successfully loaded
+     * @param ResourceLinkShareKey $share_key Resource_Link share key object.
+     * @return bool True if the resource link share key object was successfully
+     *              loaded.
      */
-    abstract public function Resource_Link_Share_Key_load($share_key);
+    abstract public function Resource_Link_Share_Key_load(
+        ResourceLinkShareKey $share_key
+    ): bool;
 
     /**
      * Save resource link share key object.
      *
-     * @param ResourceLinkShareKey $share_key Resource link share key object
-     *
-     * @return boolean True if the resource link share key object was successfully saved
+     * @param ResourceLinkShareKey $share_key Resource link share key object.
+     * @return bool True if the resource link share key object was successfully
+     *              saved.
      */
-    abstract public function Resource_Link_Share_Key_save($share_key);
+    abstract public function Resource_Link_Share_Key_save(
+        ResourceLinkShareKey $share_key
+    ): bool;
 
     /**
      * Delete resource link share key object.
      *
-     * @param ResourceLinkShareKey $share_key Resource link share key object
-     *
-     * @return boolean True if the resource link share key object was successfully deleted
+     * @param ResourceLinkShareKey $share_key Resource link share key object.
+     * @return bool True if the resource link share key object was successfully
+     *              deleted.
      */
-    abstract public function Resource_Link_Share_Key_delete($share_key);
+    abstract public function Resource_Link_Share_Key_delete(
+        ResourceLinkShareKey $share_key
+    ): bool;
 
     /**
      * Load user object.
      *
-     * @param User $user User object
-     *
-     * @return boolean True if the user object was successfully loaded
+     * @param User $user User object.
+     * @return bool True if the user object was successfully loaded.
      */
-    abstract public function User_load($user);
+    abstract public function User_load(User $user): bool;
 
     /**
      * Save user object.
      *
-     * @param User $user User object
-     *
-     * @return boolean True if the user object was successfully saved
+     * @param User $user User object.
+     * @return bool True if the user object was successfully saved.
      */
-    abstract public function User_save($user);
+    abstract public function User_save(User $user): bool;
 
     /**
      * Delete user object.
      *
-     * @param User $user User object
-     *
-     * @return boolean True if the user object was successfully deleted
+     * @param User $user User object.
+     * @return bool True if the user object was successfully deleted.
      */
-    abstract public function User_delete($user);
+    abstract public function User_delete(User $user): bool;
 
     /**
      * Create data connector object.
@@ -268,11 +273,12 @@ abstract class AbstractDataConnector
     /**
      * Generate a random string.
      *
-     * The generated string will only comprise letters (upper- and lower-case) and digits.
+     * The generated string will only comprise letters (upper- and lower-case)
+     * and digits.
      *
-     * @param int $length Length of string to be generated (optional, default is 8 characters)
-     *
-     * @return string Random string
+     * @param int $length Length of string to be generated (optional, default is
+     *                    8 characters).
+     * @return string Random string.
      */
     public static function getRandomString(int $length = 8): string
     {
@@ -302,8 +308,10 @@ abstract class AbstractDataConnector
      *
      * @return null|bool|string True if the user object was successfully deleted.
      */
-    public static function quoted(?string $value, bool $addQuotes = true): null|bool|string
-    {
+    public static function quoted(
+        ?string $value,
+        bool $addQuotes = true
+    ): null|bool|string {
         if (is_null($value)) {
             $value = 'NULL';
         } else {

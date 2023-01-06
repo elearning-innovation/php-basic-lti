@@ -89,7 +89,7 @@ class ToolConsumer
      *
      * @param string  $key             Consumer key
      * @param mixed   $data_connector  String containing table name prefix, or database connection object, or array containing one or both values (optional, default is MySQL with an empty table name prefix)
-     * @param boolean $autoEnable      true if the tool consumers is to be enabled automatically (optional, default is false)
+     * @param bool $autoEnable      true if the tool consumers is to be enabled automatically (optional, default is false)
      */
     public function __construct($key = null, $data_connector = '', $autoEnable = false)
     {
@@ -130,7 +130,7 @@ class ToolConsumer
     /**
      * Save the tool consumer to the database.
      *
-     * @return boolean True if the object was successfully saved
+     * @return bool True if the object was successfully saved
      */
     public function save()
     {
@@ -141,7 +141,7 @@ class ToolConsumer
     /**
      * Delete the tool consumer from the database.
      *
-     * @return boolean True if the object was successfully deleted
+     * @return bool True if the object was successfully deleted
      */
     public function delete()
     {
@@ -174,7 +174,7 @@ class ToolConsumer
     /**
      * Is the consumer key available to accept launch requests?
      *
-     * @return boolean True if the consumer key is enabled and within any date constraints
+     * @return bool True if the consumer key is enabled and within any date constraints
      */
     public function getIsAvailable()
     {
@@ -200,9 +200,9 @@ class ToolConsumer
      * Load the tool consumer from the database.
      *
      * @param string  $key        The consumer key value
-     * @param boolean $autoEnable True if the consumer should be enabled (optional, default if false)
+     * @param bool $autoEnable True if the consumer should be enabled (optional, default if false)
      *
-     * @return boolean True if the consumer was successfully loaded
+     * @return bool True if the consumer was successfully loaded
      */
     private function load($key, $autoEnable = false)
     {

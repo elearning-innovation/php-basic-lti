@@ -16,14 +16,9 @@ class OAuthDataStore extends AbstractDataStore
     /**
      * ToolProvider object.
      */
-    private $tool_provider = null;
+    private ?ToolProvider $tool_provider = null;
 
-    /**
-     * Class constructor.
-     *
-     * @param ToolProvider $tool_provider Tool_Provider object
-     */
-    public function __construct($tool_provider)
+    public function __construct(ToolProvider $tool_provider)
     {
         $this->tool_provider = $tool_provider;
     }
@@ -35,7 +30,7 @@ class OAuthDataStore extends AbstractDataStore
      *
      * @return Consumer OAuthConsumer object
      */
-    function lookup_consumer($consumer_key)
+    public function lookup_consumer(string $consumer_key): Consumer
     {
         return new Consumer(
             $this->tool_provider->consumer->getKey(),
@@ -52,7 +47,7 @@ class OAuthDataStore extends AbstractDataStore
      *
      * @return Token OAuthToken object
      */
-    function lookup_token($consumer, $token_type, $token)
+    public function lookup_token($consumer, $token_type, $token)
     {
         return new Token($consumer, "");
     }
@@ -64,10 +59,9 @@ class OAuthDataStore extends AbstractDataStore
      * @param string        $token     Token value
      * @param string        $value     Nonce value
      * @param string        $timestamp Date/time of request
-     *
-     * @return boolean True if the nonce value already exists
+     * @return bool True if the nonce value already exists
      */
-    function lookup_nonce($consumer, $token, $value, $timestamp)
+    public function lookup_nonce($consumer, $token, $value, $timestamp)
     {
         $nonce = new ConsumerNonce($this->tool_provider->consumer, $value);
         $ok = !$nonce->load();
@@ -87,7 +81,7 @@ class OAuthDataStore extends AbstractDataStore
      * @param Consumer $consumer  OAuthConsumer object
      * @param string        $callback  Callback URL
      */
-    function new_request_token($consumer, $callback = null): ?string
+    public function new_request_token($consumer, $callback = null): ?string
     {
         return null;
     }
@@ -99,7 +93,7 @@ class OAuthDataStore extends AbstractDataStore
      * @param Consumer $consumer  OAuthConsumer object
      * @param string        $verifier  Verification code
      */
-    function new_access_token($token, $consumer, $verifier = null): ?string
+    public function new_access_token($token, $consumer, $verifier = null): ?string
     {
         return null;
     }

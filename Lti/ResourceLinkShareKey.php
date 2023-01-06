@@ -99,7 +99,7 @@ class ResourceLinkShareKey
     /**
      * Save the resource link share key to the database.
      *
-     * @return boolean True if the share key was successfully saved
+     * @return bool True if the share key was successfully saved
      */
     public function save()
     {
@@ -125,7 +125,7 @@ class ResourceLinkShareKey
     /**
      * Delete the resource link share key from the database.
      *
-     * @return boolean True if the share key was successfully deleted
+     * @return bool True if the share key was successfully deleted
      */
     public function delete()
     {

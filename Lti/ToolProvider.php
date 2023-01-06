@@ -159,7 +159,7 @@ class ToolProvider
      * Add a parameter constraint to be checked on launch
      *
      * @param string  $name       Name of parameter to be checked.
-     * @param boolean $required   True if parameter is required.
+     * @param bool $required   True if parameter is required.
      * @param ?int    $max_length Maximum permitted length of parameter value
      *                         (optional, default is NULL).
      */
@@ -223,7 +223,7 @@ class ToolProvider
         if (isset($this->callbackHandler['connect'])) {
             $result = call_user_func($this->callbackHandler['connect'], $this);
 
-            // Callback function may return HTML, a redirect URL, or a boolean value
+            // Callback function may return HTML, a redirect URL, or a bool value
             if (is_string($result)) {
                 if ((substr($result, 0, 7) == 'http://') || (substr($result, 0, 8) == 'https://')) {
                     $this->redirectURL = $result;
@@ -571,7 +571,7 @@ class ToolProvider
 /**
  * Check if a share arrangement is in place.
  *
- * @return boolean True if no error is reported
+ * @return bool True if no error is reported
  */
     private function checkForShare()
     {

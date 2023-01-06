@@ -4,6 +4,7 @@ namespace Oscelot\Lti;
 
 use AllowDynamicProperties;
 use DOMDocument;
+use DOMElement;
 use Exception;
 use Oscelot\OAuth\Consumer;
 use Oscelot\OAuth\Request;
@@ -18,10 +19,12 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      * Read action.
      */
     public const EXT_READ = 1;
+
     /**
      * Write (create/update) action.
      */
     public const EXT_WRITE = 2;
+
     /**
      * Delete action.
      */
@@ -31,26 +34,32 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      * Decimal outcome type.
      */
     public const EXT_TYPE_DECIMAL = 'decimal';
+
     /**
      * Percentage outcome type.
      */
     public const EXT_TYPE_PERCENTAGE = 'percentage';
+
     /**
      * Ratio outcome type.
      */
     public const EXT_TYPE_RATIO = 'ratio';
+
     /**
      * Letter (A-F) outcome type.
      */
     public const EXT_TYPE_LETTER_AF = 'letteraf';
+
     /**
      * Letter (A-F) with optional +/- outcome type.
      */
     public const EXT_TYPE_LETTER_AF_PLUS = 'letterafplus';
+
     /**
      * Pass/fail outcome type.
      */
     public const EXT_TYPE_PASS_FAIL = 'passfail';
+
     /**
      * Free text outcome type.
      */
@@ -60,75 +69,91 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      * Context ID as supplied in the last connection request.
      */
     public $lti_context_id = null;
+
     /**
      * Resource link ID as supplied in the last connection request.
      */
     public $lti_resource_id = null;
+
     /**
      * Context title.
      */
-    public $title = null;
+    public ?string $title = null;
+
     /**
      * Associative array of setting values (LTI parameters, custom parameters and local parameters).
      */
-    public $settings = null;
+    public ?array $settings = null;
+
     /**
      * Associative array of user group sets (NULL if the consumer does not support the groups enhancement)
      */
-    public $group_sets = null;
+    public ?array $group_sets = null;
+
     /**
      * Associative array of user groups (NULL if the consumer does not support the groups enhancement)
      */
-    public $groups = null;
+    public ?array $groups = null;
+
     /**
      * Request for last extension service request.
      */
-    public $ext_request = null;
+    public mixed $ext_request = null;
+
     /**
      * Response from last extension service request.
      */
-    public $ext_response = null;
+    public mixed $ext_response = null;
+
     /**
      * Consumer key value for resource link being shared (if any).
      */
-    public $primary_consumer_key = null;
+    public ?string $primary_consumer_key = null;
+
     /**
      * ID value for resource link being shared (if any).
      */
-    public $primary_resource_link_id = null;
+    public mixed $primary_resource_link_id = null;
+
     /**
      * True if the sharing request has been approved by the primary resource link.
      */
-    public $share_approved = null;
+    public mixed $share_approved = null;
+
     /**
      * Date/time when the object was created.
      */
-    public $created = null;
+    public mixed $created = null;
+
     /**
      * Date/time when the object was last updated.
      */
-    public $updated = null;
+    public mixed $updated = null;
 
     /**
      * ToolConsumer object for this resource link.
      */
-    private $consumer = null;
+    private ?ToolConsumer $consumer = null;
+
     /**
      * ID for this resource link.
      */
-    private $id = null;
+    private mixed $id = null;
+
     /**
      * True if the settings value have changed since last saved.
      */
-    private $settings_changed = false;
+    private mixed $settings_changed = false;
+
     /**
      * The XML document for the last extension service request.
      */
-    private $ext_doc = null;
+    private mixed $ext_doc = null;
+
     /**
      * The XML node array for the last extension service request.
      */
-    private $ext_nodes = null;
+    private ?array $ext_nodes = null;
 
     /**
      * Class constructor.
@@ -168,7 +193,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Save the resource link to the database.
      *
-     * @return boolean True if the resource link was successfully saved.
+     * @return bool True if the resource link was successfully saved.
      */
     public function save()
     {
@@ -183,7 +208,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Delete the resource link from the database.
      *
-     * @return boolean True if the resource link was successfully deleted.
+     * @return bool True if the resource link was successfully deleted.
      */
     public function delete()
     {
@@ -271,7 +296,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Save setting values.
      *
-     * @return boolean True if the settings were successfully saved
+     * @return bool True if the settings were successfully saved
      */
     public function saveSettings()
     {
@@ -300,7 +325,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Check if the Memberships service is supported.
      *
-     * @return boolean True if this resource link supports the Memberships service
+     * @return bool True if this resource link supports the Memberships service
      */
     public function hasMembershipsService()
     {
@@ -312,7 +337,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Check if the Setting service is supported.
      *
-     * @return boolean True if this resource link supports the Setting service
+     * @return bool True if this resource link supports the Setting service
      */
     public function hasSettingService()
     {
@@ -328,7 +353,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      * @param LTI_Outcome $lti_outcome Outcome object
      * @param User $user User object
      *
-     * @return boolean True if the request was successfully processed
+     * @return bool True if the request was successfully processed
      */
     public function doOutcomesService($action, $lti_outcome, $user = null)
     {
@@ -461,7 +486,7 @@ EOF;
      *
      * The user table is updated with the new list of user objects.
      *
-     * @param boolean $withGroups True is group information is to be requested as well
+     * @param bool $withGroups True is group information is to be requested as well
      *
      * @return mixed Array of User objects or False if the request was not successful
      */
@@ -672,7 +697,7 @@ EOF;
     /**
      * Load the resource link from the database.
      *
-     * @return boolean True if resource link was successfully loaded
+     * @return bool True if resource link was successfully loaded
      */
     private function load(): bool
     {
@@ -689,7 +714,7 @@ EOF;
      *                                  supported types reported in the last
      *                                  launch for this resource link).
      *
-     * @return boolean True if the type/value are valid and supported.
+     * @return bool True if the type/value are valid and supported.
      */
     private function checkValueType(
         Outcome $lti_outcome,
@@ -777,7 +802,7 @@ EOF;
      * @param string $url    URL to send request to
      * @param array  $params Associative array of parameter values to be passed
      *
-     * @return boolean True if the request successfully obtained a response
+     * @return bool True if the request successfully obtained a response
      */
     private function doService($type, $url, $params): bool
     {
@@ -841,7 +866,7 @@ EOF;
      * @param string $url  URL to send request to
      * @param string $xml  XML of message request
      *
-     * @return boolean True if the request successfully obtained a response
+     * @return bool True if the request successfully obtained a response
      */
     private function doLTI11Service(
         string $type,
@@ -966,11 +991,10 @@ EOF;
      *
      * @param DOMElement $node XML element
      *
-     * @return array Array of XML document elements
+     * @return array|string Array of XML document elements
      */
-    private function domnode_to_array($node)
+    private function domnode_to_array(DOMElement $node): array|string
     {
-
         $output = array();
         switch ($node->nodeType) {
             case XML_CDATA_SECTION_NODE:
