@@ -44,13 +44,13 @@ class OAuthDataStore extends AbstractDataStore
      *
      * @param Consumer $consumer   OAuthConsumer object.
      * @param string   $token_type Token type.
-     * @param string   $token      Token value.
+     * @param ?string   $token      Token value.
      * @return Token OAuthToken object.
      */
     public function lookup_token(
         Consumer $consumer,
         string $token_type,
-        string $token
+        ?string $token
     ): Token {
         return new Token($consumer, "");
     }
