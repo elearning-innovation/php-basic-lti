@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpCSValidationInspection */
+<?php
 
 declare(strict_types=1);
 
@@ -6,6 +6,8 @@ namespace Oscelot\Lti;
 
 /**
  * Abstract class to provide a connection to a persistent store for LTI objects.
+ *
+ * phpcs:disable PSR1.Methods.CamelCapsMethodName
  */
 abstract class AbstractDataConnector
 {
@@ -223,8 +225,7 @@ abstract class AbstractDataConnector
         mixed $db = null,
         string $type = null
     ): AbstractDataConnector {
-        if (
-            !is_object($data_connector)
+        if (!is_object($data_connector)
             || !is_subclass_of($data_connector, get_class())
         ) {
             $prefix = null;

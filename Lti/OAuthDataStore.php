@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpCSValidationInspection */
-
 declare(strict_types=1);
 
 namespace Oscelot\Lti;
@@ -12,6 +10,8 @@ use Oscelot\OAuth\Token;
 
 /**
  * Class to represent an OAuth datastore
+ *
+ * phpcs:disable PSR1.Methods.CamelCapsMethodName
  */
 class OAuthDataStore extends AbstractDataStore
 {

@@ -78,6 +78,10 @@ class ResourceLinkShareKey
         $this->initialise();
         $this->data_connector = $resource_link->getConsumer()?->getDataConnector();
         $this->id = $id;
+        /**
+         * @noinspection PhpDeprecationInspection
+         * @noinspection PhpPossiblePolymorphicInvocationInspection
+         */
         $this->primary_context_id = &$this->primary_resource_link_id;
         if (!empty($id)) {
             $this->load();

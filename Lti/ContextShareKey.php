@@ -23,12 +23,13 @@ class ContextShareKey extends ResourceLinkShareKey
     /**
      * Class constructor.
      *
-     * @param ResourceLink $resource_link  Resource_Link object
-     * @param string      $id      Value of share key (optional, default is null)
+     * @param ResourceLink $resource_link Resource_Link object
+     * @param string       $id            Value of share key (optional, default is null)
      */
-    public function __construct($resource_link, $id = null)
+    public function __construct(ResourceLink $resource_link, $id = null)
     {
         parent::__construct($resource_link, $id);
+        /** @noinspection PhpDeprecationInspection */
         $this->primary_context_id = &$this->primary_resource_link_id;
     }
 }

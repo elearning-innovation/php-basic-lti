@@ -58,6 +58,7 @@ class Outcome
         ?string $sourcedid = null,
         ?string $value = null
     ) {
+        /** @noinspection PhpDeprecationInspection */
         $this->sourcedid = $sourcedid;
         $this->value = $value;
         $this->language = 'en-US';
@@ -73,6 +74,7 @@ class Outcome
      */
     public function getSourcedid(): ?string
     {
+        /** @noinspection PhpDeprecationInspection */
         return $this->sourcedid;
     }
 

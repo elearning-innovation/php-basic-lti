@@ -29,6 +29,7 @@ class Context extends ResourceLink
     public function __construct(?ToolConsumer $consumer, string $id)
     {
         parent::__construct($consumer, $id);
+        /** @noinspection PhpDeprecationInspection */
         $this->primary_context_id = &$this->primary_resource_link_id;
     }
 }

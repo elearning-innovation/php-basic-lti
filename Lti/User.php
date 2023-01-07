@@ -215,6 +215,7 @@ class User
         $names = array(0 => '', 1 => '');
         if (!empty($fullname)) {
             $this->fullname = trim($fullname);
+            /** @noinspection RegExpSimplifiable */
             $names = preg_split("/[\s]+/", $this->fullname, 2);
         }
         if (!empty($firstname)) {

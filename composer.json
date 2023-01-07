@@ -14,8 +14,8 @@
     "ext-pdo": "*"
   },
   "require-dev": {
-    "laminas/laminas-coding-standard": "^2.3",
-    "squizlabs/php_codesniffer": "^3.4",
+    "laminas/laminas-coding-standard": "^2.5",
+    "squizlabs/php_codesniffer": "^3.7.1",
     "vimeo/psalm": "^4.6"
   },
   "autoload": {

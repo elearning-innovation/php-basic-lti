@@ -12,25 +12,29 @@ class ResourceLinkShare
     /**
      * Consumer key value.
      */
-    public $consumer_key = null;
+    public mixed $consumer_key = null;
     /**
      * Resource link ID value.
      */
-    public $resource_link_id = null;
+    public mixed $resource_link_id = null;
     /**
      * Title of sharing context.
      */
-    public $title = null;
+    public ?string $title = null;
     /**
      * True if sharing request is to be automatically approved on first use.
      */
-    public $approved = null;
+    public ?bool $approved = null;
 
     /**
      * Class constructor.
      */
     public function __construct()
     {
+        /**
+         * @noinspection PhpDeprecationInspection
+         * @noinspection PhpPossiblePolymorphicInvocationInspection
+         */
         $this->context_id = &$this->resource_link_id;
     }
 }

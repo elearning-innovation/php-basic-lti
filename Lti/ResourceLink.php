@@ -379,6 +379,7 @@ class ResourceLink
         // Lookup service details from the source resource link appropriate to
         // the user (in case the destination is being shared).
         $source_resource_link = $this;
+        /** @noinspection PhpDeprecationInspection */
         $sourcedid = $lti_outcome->getSourcedid();
         if (!is_null($user)) {
             $source_resource_link = $user->getResourceLink();
@@ -451,6 +452,7 @@ EOF;
                             ) {
                                 break;
                             } else {
+                                // phpcs:disable Generic.Files.LineLength.TooLong
                                 $lti_outcome->setValue(
                                     $this->ext_nodes['imsx_POXBody']["{$do}Response"]['result']['resultScore']['textString']
                                 );
@@ -464,6 +466,7 @@ EOF;
                 }
             } else {
                 $params = array();
+                /** @noinspection PhpDeprecationInspection */
                 $params['sourcedid'] = $lti_outcome->getSourcedid();
                 $params['result_resultscore_textstring'] = $value;
                 if (!empty($lti_outcome->language)) {
@@ -880,6 +883,7 @@ EOF;
                         list($name, $value) = explode('=', $item);
                         $query_params[$name] = $value;
                     } else {
+                        /** @noinspection PhpUndefinedVariableInspection */
                         $query_params[$name] = '';
                     }
                 }
@@ -1050,6 +1054,7 @@ EOF;
             }
         }
         if ($ok) {
+            /** @noinspection PhpUndefinedVariableInspection */
             $response = $resp;
         } else {
             $response = '';

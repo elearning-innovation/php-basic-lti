@@ -26,6 +26,7 @@ class ContextShare extends ResourceLinkShare
     public function __construct()
     {
         parent::__construct();
+        /** @noinspection PhpDeprecationInspection */
         $this->context_id = &$this->resource_link_id;
     }
 }

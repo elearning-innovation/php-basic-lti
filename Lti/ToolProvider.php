@@ -183,6 +183,7 @@ class ToolProvider
         }
         $this->data_connector = $data_connector;
         $this->constraints = array();
+        /** @noinspection PhpDeprecationInspection */
         $this->context = &$this->resource_link;
     }
 

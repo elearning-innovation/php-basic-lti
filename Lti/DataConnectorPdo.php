@@ -1,4 +1,8 @@
-<?php /** @noinspection PhpCSValidationInspection */
+<?php
+
+/**
+ * @noinspection PhpMultipleClassDeclarationsInspection
+ */
 
 declare(strict_types=1);
 
@@ -8,6 +12,7 @@ use JsonException;
 use PDO;
 
 // phpcs:disable PSR1.Methods.CamelCapsMethodName
+// phpcs:disable Generic.Files.LineLength.TooLong
 class DataConnectorPdo extends AbstractDataConnector
 {
     private string $dbTableNamePrefix;
