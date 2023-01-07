@@ -214,12 +214,14 @@ abstract class AbstractDataConnector
      * a call to mysqli_connect() or a PDO object).  A bespoke data connector
      * class can be specified in the optional third parameter.
      *
-     * @param PDO $db A database connection object or string (optional).
+     * @param PDO|DataConnectorPdo $db A database connection object or string
+     *                                 (optional).
      * @return DataConnectorPdo Data connector object.
      */
-    public static function getDataConnector(PDO $db): DataConnectorPdo
-    {
-        return new DataConnectorPdo($db);
+    public static function getDataConnector(
+        PDO|DataConnectorPdo $db
+    ): DataConnectorPdo {
+        return $db instanceof PDO ? new DataConnectorPdo($db) : $db;
     }
 
     /**
