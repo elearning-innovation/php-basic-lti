@@ -5,6 +5,8 @@ namespace Oscelot\OAuth;
 /**
  * A class for implementing a Signature Method
  * See section 9 ("Signing Requests") in the spec
+ *
+ * phpcs:disable PSR1.Methods.CamelCapsMethodName
  */
 abstract class AbstractSignatureMethod
 {
@@ -39,14 +41,15 @@ abstract class AbstractSignatureMethod
      * @param Consumer $consumer
      * @param Token    $token
      * @param string   $signature
+     *
      * @return bool
      */
     public function check_signature(
         Request $request,
         Consumer $consumer,
         Token $token,
-        $signature
-    ) {
+        string $signature
+    ): bool {
         $built = $this->build_signature($request, $consumer, $token);
 
         // Check for zero length, although unlikely here

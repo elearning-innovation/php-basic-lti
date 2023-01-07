@@ -3,12 +3,16 @@
 namespace Oscelot\OAuth;
 
 /**
- * The RSA-SHA1 signature method uses the RSASSA-PKCS1-v1_5 signature algorithm as defined in
- * [RFC3447] section 8.2 (more simply known as PKCS#1), using SHA-1 as the hash function for
- * EMSA-PKCS1-v1_5. It is assumed that the Consumer has provided its RSA public key in a
- * verified way to the Service Provider, in a manner which is beyond the scope of this
- * specification.
+ * Abstract signature method RSA SHA-1
+ *
+ * The RSA-SHA1 signature method uses the RSASSA-PKCS1-v1_5 signature algorithm
+ * as defined in [RFC3447] section 8.2 (more simply known as PKCS#1), using
+ * SHA-1 as the hash function for EMSA-PKCS1-v1_5. It is assumed that the
+ * Consumer has provided its RSA public key in a verified way to the Service
+ * Provider, in a manner which is beyond the scope of this specification.
  *   - Chapter 9.3 ("RSA-SHA1")
+ *
+ * phpcs:disable PSR1.Methods.CamelCapsMethodName
  */
 abstract class AbstractSignatureMethodRsaSha1 extends AbstractSignatureMethod
 {
@@ -31,28 +35,43 @@ abstract class AbstractSignatureMethodRsaSha1 extends AbstractSignatureMethod
     // Either way should return a string representation of the certificate
     abstract protected function fetch_private_cert(&$request);
 
-    public function build_signature(Request $request, Consumer $consumer, $token)
-    {
+    public function build_signature(
+        Request $request,
+        Consumer $consumer,
+        Token $token
+    ): string {
         $base_string          = $request->get_signature_base_string();
         $request->base_string = $base_string;
 
         // Fetch the private key cert based on the request
         $cert = $this->fetch_private_cert($request);
 
-        // Pull the private key ID from the certificate
+        /**
+         * Pull the private key ID from the certificate.
+         *
+         * @noinspection AliasFunctionsUsageInspection
+         */
         $privatekeyid = openssl_get_privatekey($cert);
 
         // Sign using the key
         $ok = openssl_sign($base_string, $signature, $privatekeyid);
 
-        // Release the key resource
+        /**
+         * Release the key resource
+         *
+         * @noinspection PhpDeprecationInspection
+         */
         openssl_free_key($privatekeyid);
 
         return base64_encode($signature);
     }
 
-    public function check_signature(Request $request, Consumer $consumer, Token $token, $signature)
-    {
+    public function check_signature(
+        Request $request,
+        Consumer $consumer,
+        Token $token,
+        string $signature
+    ): bool {
         $decoded_sig = base64_decode($signature);
 
         $base_string = $request->get_signature_base_string();
@@ -66,7 +85,11 @@ abstract class AbstractSignatureMethodRsaSha1 extends AbstractSignatureMethod
         // Check the computed signature against the one passed in the query
         $ok = openssl_verify($base_string, $decoded_sig, $publickeyid);
 
-        // Release the key resource
+        /**
+         * Release the key resource
+         *
+         * @noinspection PhpDeprecationInspection
+         */
         openssl_free_key($publickeyid);
 
         return $ok === 1;

@@ -1,33 +1,42 @@
 <?php
 
+/** @noinspection InArrayMissUseInspection */
+
 declare(strict_types=1);
 
 namespace Oscelot\OAuth;
 
+/**
+ * Server
+ *
+ * phpcs:disable PSR1.Methods.CamelCapsMethodName
+ */
 class Server
 {
-    protected $timestamp_threshold = 300; // in seconds, five minutes
-    protected $version             = '1.0';             // hi blaine
-    protected $signature_methods   = [];
+    protected int $timestamp_threshold = 300; // in seconds, five minutes
+    protected string $version             = '1.0';             // hi blaine
+    protected array $signature_methods   = [];
 
-    protected $data_store;
+    protected mixed $data_store;
 
-    function __construct($data_store)
+    public function __construct(mixed $data_store)
     {
         $this->data_store = $data_store;
     }
 
-    public function add_signature_method($signature_method)
+    public function add_signature_method($signature_method): void
     {
         $this->signature_methods[$signature_method->get_name()] =
             $signature_method;
     }
 
-    // high level functions
-
     /**
+     * Fetch request token
+     *
      * process a request_token request
      * returns the request token on success
+     *
+     * @throws OscelotOAuthException
      */
     public function fetch_request_token(&$request)
     {
@@ -46,8 +55,12 @@ class Server
     }
 
     /**
+     * Fetch access token
+     *
      * process an access_token request
      * returns the access token on success
+     *
+     * @throws OscelotOAuthException
      */
     public function fetch_access_token(&$request)
     {
@@ -66,9 +79,13 @@ class Server
     }
 
     /**
-     * verify an api call, checks all the parameters
+     * Verify request
+     *
+     * Verify an api call, checks all the parameters.
+     *
+     * @throws OscelotOAuthException
      */
-    public function verify_request(&$request)
+    public function verify_request(&$request): array
     {
         $this->get_version($request);
         $consumer = $this->get_consumer($request);
@@ -77,37 +94,47 @@ class Server
         return [$consumer, $token];
     }
 
-    // Internals from here
     /**
-     * version 1
+     * Get version
+     *
+     * Version 1.
+     *
+     * @throws OscelotOAuthException
+     * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection
      */
-    private function get_version(&$request)
+    private function get_version(&$request): void
     {
         $version = $request->get_parameter('oauth_version');
         if (! $version) {
             // Service Providers MUST assume the protocol version to be 1.0 if this parameter is not present.
-            // Chapter 7.0 ("Accessing Protected Ressources")
+            // Chapter 7.0 ("Accessing Protected Resources")
             $version = '1.0';
         }
         if ($version !== $this->version) {
             throw new OscelotOAuthException("OAuth version '$version' not supported");
         }
-        return $version;
     }
 
     /**
      * figure out the signature with some defaults
+     *
+     * @throws OscelotOAuthException
      */
     private function get_signature_method($request)
     {
-        $signature_method = $request instanceof OAuthRequest
+        $signature_method = $request instanceof Request
             ? $request->get_parameter('oauth_signature_method')
             : null;
 
         if (! $signature_method) {
-            // According to chapter 7 ("Accessing Protected Ressources") the signature-method
-            // parameter is required, and we can't just fallback to PLAINTEXT
-            throw new OscelotOAuthException('No signature method parameter. This parameter is required');
+            /**
+             * According to chapter 7 ("Accessing Protected Resources") the
+             * signature-method parameter is required, and we can't just
+             * fallback to PLAINTEXT.
+             */
+            throw new OscelotOAuthException(
+                'No signature method parameter. This parameter is required'
+            );
         }
 
         if (! in_array(
@@ -124,11 +151,15 @@ class Server
     }
 
     /**
-     * try to find the consumer for the provided request's consumer key
+     * Get consumer
+     *
+     * Try to find the consumer for the provided request's consumer key.
+     *
+     * @throws OscelotOAuthException
      */
     private function get_consumer($request)
     {
-        $consumer_key = $request instanceof OAuthRequest
+        $consumer_key = $request instanceof Request
             ? $request->get_parameter('oauth_consumer_key')
             : null;
 
@@ -145,11 +176,15 @@ class Server
     }
 
     /**
-     * try to find the token for the provided request's token key
+     * Get token
+     *
+     * Try to find the token for the provided request's token key.
+     *
+     * @throws OscelotOAuthException
      */
     private function get_token($request, $consumer, $token_type = 'access')
     {
-        $token_field = $request instanceof OAuthRequest
+        $token_field = $request instanceof Request
             ? $request->get_parameter('oauth_token')
             : null;
 
@@ -159,22 +194,28 @@ class Server
             $token_field
         );
         if (! $token) {
-            throw new OscelotOAuthException("Invalid $token_type token: $token_field");
+            throw new OscelotOAuthException(
+                "Invalid $token_type token: $token_field"
+            );
         }
         return $token;
     }
 
     /**
+     * Check signature
+     *
      * all-in-one function to check the signature on a request
      * should guess the signature method appropriately
+     *
+     * @throws OscelotOAuthException
      */
-    private function check_signature($request, $consumer, $token)
+    private function check_signature($request, $consumer, $token): void
     {
         // this should probably be in a different method
-        $timestamp = $request instanceof OAuthRequest
+        $timestamp = $request instanceof Request
             ? $request->get_parameter('oauth_timestamp')
             : null;
-        $nonce     = $request instanceof OAuthRequest
+        $nonce     = $request instanceof Request
             ? $request->get_parameter('oauth_nonce')
             : null;
 
@@ -190,16 +231,16 @@ class Server
             $token,
             $signature
         );
-
-        //        if (! $valid_sig) {
-        //            throw new OscelotOAuthException('Invalid signature');
-        //        }
     }
 
     /**
-     * check that the timestamp is new enough
+     * Check timestamp
+     *
+     * Check that the timestamp is new enough.
+     *
+     * @throws OscelotOAuthException
      */
-    private function check_timestamp($timestamp)
+    private function check_timestamp($timestamp): void
     {
         if (! $timestamp) {
             throw new OscelotOAuthException(
@@ -207,7 +248,7 @@ class Server
             );
         }
 
-        // verify that timestamp is recentish
+        // Verify that timestamp is recent-ish.
         $now = time();
         if (abs($now - $timestamp) > $this->timestamp_threshold) {
             throw new OscelotOAuthException(
@@ -217,9 +258,13 @@ class Server
     }
 
     /**
-     * check that the nonce is not repeated
+     * Check nonce
+     *
+     * Check that the nonce is not repeated.
+     *
+     * @throws OscelotOAuthException
      */
-    private function check_nonce($consumer, $token, $nonce, $timestamp)
+    private function check_nonce($consumer, $token, $nonce, $timestamp): void
     {
         if (! $nonce) {
             throw new OscelotOAuthException(
@@ -227,7 +272,7 @@ class Server
             );
         }
 
-        // verify that the nonce is uniqueish
+        // Verify that the nonce is unique-ish.
         $found = $this->data_store->lookup_nonce(
             $consumer,
             $token,

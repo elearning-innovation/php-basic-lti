@@ -1,11 +1,10 @@
 <?php
 
-/** @noinspection PhpCSValidationInspection */
-
 declare(strict_types=1);
 
 namespace Oscelot\OAuth;
 
+// phpcs:disable PSR1.Methods.CamelCapsMethodName
 abstract class AbstractDataStore
 {
     abstract public function lookup_consumer(string $consumer_key);

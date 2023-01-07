@@ -11,7 +11,8 @@
     "php": "^8.2",
     "ext-dom": "*",
     "ext-curl": "*",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "ext-openssl": "*"
   },
   "require-dev": {
     "laminas/laminas-coding-standard": "^2.5",
