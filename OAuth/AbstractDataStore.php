@@ -23,8 +23,6 @@ abstract class AbstractDataStore
     );
 
     /**
-     * @param Consumer $consumer
-     * @param              $callback
      * @return ?Token A new token attached to this consumer
      */
     abstract public function new_request_token(
@@ -33,8 +31,6 @@ abstract class AbstractDataStore
     ): ?Token;
 
     /**
-     * @param Token    $token
-     * @param Consumer $consumer
      * @param null     $verifier
      * @return ?Token A new access token attached to this consumer for the user
      *               associated with this token if the request token is
