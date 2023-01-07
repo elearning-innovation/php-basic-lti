@@ -14,8 +14,11 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
 
 /**
  * Class to represent a tool consumer resource link
+ *
+ * phpcs:disable PSR1.Methods.CamelCapsMethodName
  */
-#[AllowDynamicProperties] class ResourceLink
+#[AllowDynamicProperties]
+class ResourceLink
 {
     /**
      * Read action.
@@ -139,12 +142,12 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * ToolConsumer object for this resource link.
      */
-    private ?ToolConsumer $consumer = null;
+    private ?ToolConsumer $consumer;
 
     /**
      * ID for this resource link.
      */
-    private mixed $id = null;
+    private mixed $id;
 
     /**
      * True if the settings value have changed since last saved.
@@ -556,12 +559,9 @@ EOF;
                 #
                 ### Set the user name
                 #
-                $firstname = (isset($members[$i]['person_name_given'])) ?
-                    $members[$i]['person_name_given'] : '';
-                $lastname = (isset($members[$i]['person_name_family'])) ?
-                    $members[$i]['person_name_family'] : '';
-                $fullname = (isset($members[$i]['person_name_full'])) ?
-                    $members[$i]['person_name_full'] : '';
+                $firstname = $members[$i]['person_name_given'] ?? '';
+                $lastname = $members[$i]['person_name_family'] ?? '';
+                $fullname = $members[$i]['person_name_full'] ?? '';
                 $user->setNames($firstname, $lastname, $fullname);
 
                 // Set the user email
@@ -998,9 +998,12 @@ EOF;
     /**
      * Get the response from an HTTP POST request.
      *
-     * @param string      $url    URL to send request to.
-     * @param array|string       $params Associative array of parameter values to be passed.
-     * @param ?string $header Values to include in the request header (optional, default is none).
+     * @param string $url URL to send request to.
+     * @param array|string $params Associative array of parameter values
+     *                             to be passed.
+     * @param ?string $header Values to include in the request header (optional,
+     *                        default is none).
+     *
      * @return string response contents, empty if the request was not successful.
      */
     private function do_post_request(
@@ -1058,23 +1061,23 @@ EOF;
     /**
      * Convert DOM nodes to array.
      *
-     * @param DOMElement $node XML element.
+     * @param ?DOMElement $node XML element.
      * @return array|string Array of XML document elements.
      */
-    private function domnode_to_array(DOMElement $node): array|string
+    private function domnode_to_array(?DOMElement $node): array|string
     {
         $output = array();
-        switch ($node->nodeType) {
+        switch ($node?->nodeType) {
             case XML_CDATA_SECTION_NODE:
             case XML_TEXT_NODE:
-                $output = trim($node->textContent);
+                $output = trim($node?->textContent);
                 break;
             case XML_ELEMENT_NODE:
-                for ($i=0, $m=$node->childNodes->length; $i<$m; $i++) {
-                    $child = $node->childNodes->item($i);
+                for ($i=0, $m=$node?->childNodes->length; $i<$m; $i++) {
+                    $child = $node?->childNodes->item($i);
                     $v = $this->domnode_to_array($child);
                     if (isset($child->tagName)) {
-                        $t = $child->tagName;
+                        $t = $child?->tagName;
                         if (!isset($output[$t])) {
                             $output[$t] = array();
                         }
@@ -1087,15 +1090,15 @@ EOF;
                     }
                 }
                 if (is_array($output)) {
-                    if ($node->attributes->length) {
+                    if ($node?->attributes->length) {
                         $a = array();
-                        foreach ($node->attributes as $attrName => $attrNode) {
+                        foreach ($node?->attributes as $attrName => $attrNode) {
                             $a[$attrName] = (string) $attrNode->value;
                         }
                         $output['@attributes'] = $a;
                     }
                     foreach ($output as $t => $v) {
-                        if (is_array($v) && count($v)==1 && $t!='@attributes') {
+                        if (is_array($v) && $t!='@attributes' && count($v)==1) {
                             $output[$t] = $v[0];
                         }
                     }
