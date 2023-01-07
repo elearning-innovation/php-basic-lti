@@ -98,7 +98,7 @@ class Request
      */
     public static function from_consumer_and_token(
         Consumer $consumer,
-        Token $token,
+        ?Token $token,
         ?string $http_method,
         ?string $http_url,
         ?array $parameters = null

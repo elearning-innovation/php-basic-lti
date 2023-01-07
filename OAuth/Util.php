@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Oscelot\OAuth;
 
+// phpcs:disable PSR1.Methods.CamelCapsMethodName
 class Util
 {
-    public static function urlencode_rfc3986($input)
+    public static function urlencode_rfc3986($input): array|string
     {
         if (is_array($input)) {
             return array_map(['Util', 'urlencode_rfc3986'], $input);
@@ -14,9 +15,9 @@ class Util
 
         if (is_scalar($input)) {
             return str_replace(
-                '+',
-                ' ',
-                str_replace('%7E', '~', rawurlencode($input))
+                array('%7E', '+'),
+                array('~', ' '),
+                rawurlencode($input)
             );
         } else {
             return '';
@@ -26,7 +27,7 @@ class Util
     // This decode function isn't taking into consideration the above
     // modifications to the encoding process. However, this method doesn't
     // seem to be used anywhere so leaving it as is.
-    public static function urldecode_rfc3986($string)
+    public static function urldecode_rfc3986($string): string
     {
         return urldecode($string);
     }
@@ -36,7 +37,7 @@ class Util
     // Can filter out any non-oauth parameters if needed (default behaviour)
     // May 28th, 2010 - method updated to tjerk.meesters for a speed improvement.
     //                  see http://code.google.com/p/oauth/issues/detail?id=163
-    public static function split_header($header, $only_allow_oauth_parameters = true)
+    public static function split_header($header, $only_allow_oauth_parameters = true): array
     {
         $params = [];
         if (preg_match_all('/(' . ($only_allow_oauth_parameters ?
@@ -54,7 +55,7 @@ class Util
     }
 
     // helper to try to sort out headers for people who aren't running apache
-    public static function get_headers()
+    public static function get_headers(): array
     {
         if (function_exists('apache_request_headers')) {
             // we need this to get the actual Authorization: header
@@ -105,7 +106,7 @@ class Util
     // This function takes a input like a=b&a=c&d=e and returns the parsed
     // parameters like this
     // array('a' => array('b','c'), 'd' => 'e')
-    public static function parse_parameters($input)
+    public static function parse_parameters($input): array
     {
         if (! isset($input) || ! $input) {
             return [];
@@ -120,7 +121,7 @@ class Util
             $value     = isset($split[1]) ? self::urldecode_rfc3986($split[1]) : '';
 
             if (isset($parsed_parameters[$parameter])) {
-                // We have already recieved parameter(s) with this name, so add to the list
+                // We have already received parameter(s) with this name, so add to the list
                 // of parameters with this name
 
                 if (is_scalar($parsed_parameters[$parameter])) {
@@ -137,7 +138,7 @@ class Util
         return $parsed_parameters;
     }
 
-    public static function build_http_query($params)
+    public static function build_http_query($params): string
     {
         if (! $params) {
             return '';

@@ -9,6 +9,7 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use Oscelot\OAuth\Consumer;
+use Oscelot\OAuth\OscelotOAuthException;
 use Oscelot\OAuth\Request;
 use Oscelot\OAuth\SignatureMethodHmacSha1;
 
@@ -367,6 +368,7 @@ class ResourceLink
      * @param null    $user        User object.
      *
      * @return bool|string True if the request was successfully processed.
+     * @throws OscelotOAuthException
      */
     public function doOutcomesService(
         int $action,
@@ -862,13 +864,13 @@ EOF;
      *
      * @param string $type   Message type value.
      * @param string $url    URL to send request to.
-     * @param array  $params Associative array of parameter values to be passed.
+     * @param ?array  $params Associative array of parameter values to be passed.
      * @return bool True if the request successfully obtained a response.
      */
     private function doService(
         string $type,
         string $url,
-        array $params
+        ?array $params
     ): bool {
         $this->ext_response = null;
         if (!empty($url)) {
@@ -939,6 +941,7 @@ EOF;
      * @param string $xml  XML of message request
      *
      * @return bool True if the request successfully obtained a response
+     * @throws OscelotOAuthException
      */
     private function doLTI11Service(
         string $type,
