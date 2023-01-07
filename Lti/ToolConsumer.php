@@ -87,12 +87,12 @@ class ToolConsumer
     /**
      * Date/time when the object was created.
      */
-    public ?string $created = null;
+    public false|int|null $created = null;
 
     /**
      * Date/time when the object was last updated.
      */
-    public ?string $updated = null;
+    public false|int|null $updated = null;
 
     /**
      * Consumer key value.

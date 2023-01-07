@@ -36,11 +36,10 @@ abstract class AbstractDataStore
     ): ?Token;
 
     /**
-     * @param Token        $token
+     * @param Token    $token
      * @param Consumer $consumer
-     * @param              $verifier
-     *
-     * @return Token A new access token attached to this consumer for the user
+     * @param null     $verifier
+     * @return ?Token A new access token attached to this consumer for the user
      *               associated with this token if the request token is
      *               authorized should also invalidate the request token.
      */
