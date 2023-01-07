@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Oscelot\Lti;
 
 /**
- * Abstract class to provide a connection to a persistent store for LTI objects
+ * Abstract class to provide a connection to a persistent store for LTI objects.
  */
 abstract class AbstractDataConnector
 {
@@ -71,7 +71,9 @@ abstract class AbstractDataConnector
      * @param ResourceLink $resource_link Resource_Link object.
      * @return bool True if the resource link object was successfully loaded.
      */
-    abstract public function Resource_Link_load(ResourceLink $resource_link): bool;
+    abstract public function Resource_Link_load(
+        ResourceLink $resource_link
+    ): bool;
 
     /**
      * Save resource link object.
@@ -97,10 +99,10 @@ abstract class AbstractDataConnector
      * Get array of user objects.
      *
      * @param ResourceLink $resource_link Resource link object.
-     * @param bool         $local_only    True if only users within the resource link are
-     *                         to be returned (excluding users sharing this
-     *                         resource link).
-     * @param int          $id_scope      Scope value to use for user IDs.
+     * @param bool $local_only True if only users within the resource
+     *                         link are to be returned (excluding users sharing
+     *                         this resource link).
+     * @param int $id_scope Scope value to use for user IDs.
      * @return User[] Array of User objects.
      */
     abstract public function Resource_Link_getUserResultSourcedIDs(
@@ -208,18 +210,23 @@ abstract class AbstractDataConnector
      * a call to mysqli_connect() or a PDO object).  A bespoke data connector
      * class can be specified in the optional third parameter.
      *
-     * @param mixed       $data_connector A data connector object, string or array
-     * @param mixed|null  $db             A database connection object or string (optional)
-     * @param string|null $type           The type of data connector (optional)
+     * @param mixed $data_connector A data connector object, string or
+     *                              array.
+     * @param mixed|null $db        A database connection object or string
+     *                              (optional).
+     * @param string|null $type     The type of data connector (optional).
      *
-     * @return AbstractDataConnector Data connector object
+     * @return AbstractDataConnector Data connector object.
      */
     public static function getDataConnector(
         mixed $data_connector,
         mixed $db = null,
         string $type = null
     ): AbstractDataConnector {
-        if (!is_object($data_connector) || !is_subclass_of($data_connector, get_class())) {
+        if (
+            !is_object($data_connector)
+            || !is_subclass_of($data_connector, get_class())
+        ) {
             $prefix = null;
             if (is_string($data_connector)) {
                 $prefix = $data_connector;
