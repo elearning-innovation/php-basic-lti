@@ -24,6 +24,9 @@ class Server
         $this->data_store = $data_store;
     }
 
+    /**
+     * Add signature method
+     */
     public function add_signature_method($signature_method): void
     {
         $this->signature_methods[$signature_method->get_name()] =
@@ -106,8 +109,9 @@ class Server
     {
         $version = $request->get_parameter('oauth_version');
         if (! $version) {
-            // Service Providers MUST assume the protocol version to be 1.0 if this parameter is not present.
-            // Chapter 7.0 ("Accessing Protected Resources")
+            // Service Providers MUST assume the protocol version to be 1.0 if
+            // this parameter is not present. Chapter 7.0 ("Accessing Protected
+            // Resources").
             $version = '1.0';
         }
         if ($version !== $this->version) {
@@ -116,7 +120,9 @@ class Server
     }
 
     /**
-     * figure out the signature with some defaults
+     * Get signature method
+     *
+     * Figure out the signature with some defaults.
      *
      * @throws OscelotOAuthException
      */
