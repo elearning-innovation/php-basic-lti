@@ -32,19 +32,19 @@ class Outcome
     /**
      * Outcome data source value.
      */
-    public $data_source = null;
+    public ?string $data_source = null;
 
     /**
      * Result sourcedid.
      *
      * @deprecated Use User object instead
      */
-    private ?string $sourcedid = null;
+    private ?string $sourcedid;
 
     /**
      * Outcome value.
      */
-    private ?string $value = null;
+    private int|float|null $value;
 
     /**
      * Class constructor.
@@ -90,9 +90,9 @@ class Outcome
     /**
      * Set the outcome value.
      *
-     * @param string $value Outcome value
+     * @param int|float $value Outcome value.
      */
-    public function setValue(string $value): void
+    public function setValue(int|float $value): void
     {
         $this->value = $value;
     }

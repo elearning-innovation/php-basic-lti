@@ -83,17 +83,20 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     public ?string $title = null;
 
     /**
-     * Associative array of setting values (LTI parameters, custom parameters and local parameters).
+     * Associative array of setting values (LTI parameters, custom parameters
+     * and local parameters).
      */
     public ?array $settings = null;
 
     /**
-     * Associative array of user group sets (NULL if the consumer does not support the groups enhancement)
+     * Associative array of user group sets (NULL if the consumer does not
+     * support the groups enhancement).
      */
     public ?array $group_sets = null;
 
     /**
-     * Associative array of user groups (NULL if the consumer does not support the groups enhancement)
+     * Associative array of user groups (NULL if the consumer does not support
+     * the groups enhancement).
      */
     public ?array $groups = null;
 
@@ -118,7 +121,8 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     public mixed $primary_resource_link_id = null;
 
     /**
-     * True if the sharing request has been approved by the primary resource link.
+     * True if the sharing request has been approved by the primary resource
+     * link.
      */
     public mixed $share_approved = null;
 
@@ -197,7 +201,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      *
      * @return bool True if the resource link was successfully saved.
      */
-    public function save()
+    public function save(): bool
     {
         $ok = $this->consumer->getDataConnector()->Resource_Link_save($this);
         if ($ok) {
@@ -212,7 +216,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      *
      * @return bool True if the resource link was successfully deleted.
      */
-    public function delete()
+    public function delete(): bool
     {
         return $this->consumer->getDataConnector()->Resource_Link_delete($this);
     }
@@ -220,9 +224,9 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Get tool consumer.
      *
-     * @return object ToolConsumer object for this resource link.
+     * @return ?ToolConsumer ToolConsumer object for this resource link.
      */
-    public function getConsumer()
+    public function getConsumer(): ?ToolConsumer
     {
         return $this->consumer;
     }
@@ -232,7 +236,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      *
      * @return string Consumer key value for this resource link.
      */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->consumer->getKey();
     }
@@ -242,7 +246,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      *
      * @return string ID for this resource link.
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -250,13 +254,15 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Get a setting value.
      *
-     * @param string $name    Name of setting
-     * @param string $default Value to return if the setting does not exist (optional, default is an empty string)
-     *
-     * @return string Setting value
+     * @param string  $name    Name of setting.
+     * @param ?string $default Value to return if the setting does not exist
+     *                         (optional, default is an empty string).
+     * @return ?string Setting value.
      */
-    public function getSetting($name, $default = '')
-    {
+    public function getSetting(
+        string $name,
+        ?string $default = ''
+    ): ?string {
         if (array_key_exists($name, $this->settings)) {
             $value = $this->settings[$name];
         } else {
@@ -269,10 +275,11 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Set a setting value.
      *
-     * @param string $name  Name of setting
-     * @param string $value Value to set, use an empty value to delete a setting (optional, default is null)
+     * @param string  $name  Name of setting
+     * @param ?string $value Value to set, use an empty value to delete a
+     *                       setting (optional, default is null).
      */
-    public function setSetting($name, $value = null)
+    public function setSetting(string $name, ?string $value = null): void
     {
         $old_value = $this->getSetting($name);
         if ($value != $old_value) {
@@ -288,9 +295,9 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Get an array of all setting values.
      *
-     * @return array Associative array of setting values
+     * @return ?array Associative array of setting values.
      */
-    public function getSettings()
+    public function getSettings(): ?array
     {
         return $this->settings;
     }
@@ -300,7 +307,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      *
      * @return bool True if the settings were successfully saved
      */
-    public function saveSettings()
+    public function saveSettings(): bool
     {
         if ($this->settings_changed) {
             $ok = $this->save();
@@ -317,9 +324,10 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      * @return bool True if this resource link supports the Outcomes service
      *              (either the LTI 1.1 or extension service).
      */
-    public function hasOutcomesService()
+    public function hasOutcomesService(): bool
     {
-        $url = $this->getSetting('ext_ims_lis_basic_outcome_url') . $this->getSetting('lis_outcome_service_url');
+        $url = $this->getSetting('ext_ims_lis_basic_outcome_url')
+            . $this->getSetting('lis_outcome_service_url');
 
         return !empty($url);
     }
@@ -351,14 +359,15 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Perform an Outcomes service request.
      *
-     * @param int $action The action type constant.
+     * @param int     $action      The action type constant.
      * @param Outcome $lti_outcome Outcome object.
-     * @param User $user User object.
-     * @return bool True if the request was successfully processed.
+     * @param null    $user        User object.
+     *
+     * @return bool|string True if the request was successfully processed.
      */
     public function doOutcomesService(
-        $action,
-        $lti_outcome,
+        int $action,
+        Outcome $lti_outcome,
         $user = null
     ): bool|string {
         $response = false;
@@ -433,10 +442,14 @@ EOF;
                 if ($this->doLTI11Service($do, $urlLTI11, $xml)) {
                     switch ($action) {
                         case self::EXT_READ:
-                            if (!isset($this->ext_nodes['imsx_POXBody']["{$do}Response"]['result']['resultScore']['textString'])) {
+                            if (!isset(
+                                $this->ext_nodes['imsx_POXBody']["{$do}Response"]['result']['resultScore']['textString'])
+                            ) {
                                 break;
                             } else {
-                                $lti_outcome->setValue($this->ext_nodes['imsx_POXBody']["{$do}Response"]['result']['resultScore']['textString']);
+                                $lti_outcome->setValue(
+                                    $this->ext_nodes['imsx_POXBody']["{$do}Response"]['result']['resultScore']['textString']
+                                );
                             }
                         case self::EXT_WRITE:
                         case self::EXT_DELETE:
@@ -492,26 +505,38 @@ EOF;
      *
      * @param bool $withGroups True is group information is to be requested as
      *                         well.
-     * @return mixed Array of User objects or False if the request was not
+     * @return array|false Array of User objects or False if the request was not
      *               successful.
      */
-    public function doMembershipsService(bool $withGroups = false): mixed
+    public function doMembershipsService(bool $withGroups = false): array|false
     {
         $users = array();
-        $old_users = $this->getUserResultSourcedIDs(true, ToolProvider::ID_SCOPE_RESOURCE);
+        $old_users = $this->getUserResultSourcedIDs(
+            true,
+            ToolProvider::ID_SCOPE_RESOURCE
+        );
         $this->ext_response = null;
         $url = $this->getSetting('ext_ims_lis_memberships_url');
         $params = array();
         $params['id'] = $this->getSetting('ext_ims_lis_memberships_id');
         $ok = false;
         if ($withGroups) {
-            $ok = $this->doService('basic-lis-readmembershipsforcontextwithgroups', $url, $params);
+            $ok = $this->doService(
+                'basic-lis-readmembershipsforcontextwithgroups',
+                $url,
+                $params
+            );
         }
+
         if ($ok) {
             $this->group_sets = array();
             $this->groups = array();
         } else {
-            $ok = $this->doService('basic-lis-readmembershipsforcontext', $url, $params);
+            $ok = $this->doService(
+                'basic-lis-readmembershipsforcontext',
+                $url,
+                $params
+            );
         }
 
         if ($ok) {
@@ -629,14 +654,14 @@ EOF;
     /**
      * Perform a Setting service request.
      *
-     * @param int    $action The action type constant
-     * @param string $value  The setting value (optional, default is null)
+     * @param int    $action The action type constant.
+     * @param ?string $value  The setting value (optional, default is null).
      * @return mixed The setting value for a read action, true if a write or
      *               delete action was successful, otherwise false.
      */
     public function doSettingService(
-        $action,
-        $value = null
+        int $action,
+        ?string $value = null
     ): mixed {
         $response = false;
         $this->ext_response = null;
@@ -697,7 +722,6 @@ EOF;
      *                         (optional, default is false).
      * @param int|null $id_scope Scope to use for ID values (optional, default
      *                           is null for consumer default).
-     *
      * @return array Array of User objects.
      */
     public function getUserResultSourcedIDs(
@@ -719,29 +743,31 @@ EOF;
      */
     public function getShares(): array
     {
-        return $this->consumer->getDataConnector()->Resource_Link_getShares($this);
+        return $this->consumer->getDataConnector()->Resource_Link_getShares(
+            $this
+        );
     }
 
     /**
      * Load the resource link from the database.
      *
-     * @return bool True if resource link was successfully loaded
+     * @return void True if resource link was successfully loaded.
      */
-    private function load(): bool
+    private function load(): void
     {
         $this->initialise();
-        return $this->consumer->getDataConnector()->Resource_Link_load($this);
+        $this->consumer->getDataConnector()->Resource_Link_load($this);
     }
 
     /**
      * Convert data type of value to a supported type if possible.
      *
-     * @param Outcome       $lti_outcome     Outcome object
-     * @param string[]|null $supported_types Array of outcome types to be supported
-     *                                  (optional, default is null to use
-     *                                  supported types reported in the last
-     *                                  launch for this resource link).
-     *
+     * @param Outcome       $lti_outcome     Outcome object.
+     * @param string[]|null $supported_types Array of outcome types to be
+     *                                       supported. (optional, default is
+     *                                       null to use supported types
+     *                                       reported in the last launch for
+     *                                       this resource link).
      * @return bool True if the type/value are valid and supported.
      */
     private function checkValueType(
@@ -762,10 +788,10 @@ EOF;
 
         $type = $lti_outcome->type;
         $value = $lti_outcome->getValue();
-        // Check whether the type is supported or there is no value
+        // Check whether the type is supported or there is no value.
         $ok = in_array($type, $supported_types) || (strlen($value) <= 0);
         if (!$ok) {
-            // Convert numeric values to decimal
+            // Convert numeric values to decimal.
             if ($type == self::EXT_TYPE_PERCENTAGE) {
                 if (substr($value, -1) == '%') {
                     $value = substr($value, 0, -1);
@@ -777,13 +803,16 @@ EOF;
                 }
             } elseif ($type == self::EXT_TYPE_RATIO) {
                 $parts = explode('/', $value, 2);
-                $ok = (count($parts) == 2) && is_numeric($parts[0]) && is_numeric($parts[1]) && ($parts[0] >= 0) && ($parts[1] > 0);
+                $ok = (count($parts) == 2)
+                    && is_numeric($parts[0])
+                    && is_numeric($parts[1])
+                    && ($parts[0] >= 0)
+                    && ($parts[1] > 0);
                 if ($ok) {
                     $lti_outcome->setValue($parts[0] / $parts[1]);
                     $lti_outcome->type = self::EXT_TYPE_DECIMAL;
                 }
-
-                // Convert letter_af to letter_af_plus or text
+            // Convert letter_af to letter_af_plus or text
             } elseif ($type == self::EXT_TYPE_LETTER_AF) {
                 if (in_array(self::EXT_TYPE_LETTER_AF_PLUS, $supported_types)) {
                     $ok = true;
@@ -1000,7 +1029,8 @@ EOF;
             $ok = $resp !== false;
             curl_close($ch);
         }
-        // Try using fopen if curl was not available or did not work (could have been an SSL certificate issue)
+        // Try using fopen if curl was not available or did not work (could have
+        // been an SSL certificate issue).
         if (!$ok) {
             $opts = array('method' => 'POST',
                           'content' => $data
@@ -1027,9 +1057,8 @@ EOF;
     /**
      * Convert DOM nodes to array.
      *
-     * @param DOMElement $node XML element
-     *
-     * @return array|string Array of XML document elements
+     * @param DOMElement $node XML element.
+     * @return array|string Array of XML document elements.
      */
     private function domnode_to_array(DOMElement $node): array|string
     {
