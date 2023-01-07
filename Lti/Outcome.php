@@ -37,7 +37,7 @@ class Outcome
     /**
      * Result sourcedid.
      *
-     * @deprecated Use User object instead
+     * @deprecated Use User object instead.
      */
     private ?string $sourcedid;
 
@@ -68,9 +68,8 @@ class Outcome
     /**
      * Get the result sourcedid value.
      *
-     * @deprecated Use User object instead
-     *
-     * @return ?string Result sourcedid value
+     * @deprecated Use User object instead.
+     * @return ?string Result sourcedid value.
      */
     public function getSourcedid(): ?string
     {
@@ -80,7 +79,7 @@ class Outcome
     /**
      * Get the outcome value.
      *
-     * @return ?string Outcome value
+     * @return ?string Outcome value.
      */
     public function getValue(): ?string
     {
