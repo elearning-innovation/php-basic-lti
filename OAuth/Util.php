@@ -10,7 +10,7 @@ class Util
     public static function urlencode_rfc3986($input): array|string
     {
         if (is_array($input)) {
-            return array_map(['Util', 'urlencode_rfc3986'], $input);
+            return array_map(self::urlencode_rfc3986($input), $input);
         }
 
         if (is_scalar($input)) {
