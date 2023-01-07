@@ -60,13 +60,13 @@ class ToolConsumer
      * Date/time from which the the tool consumer instance is enabled to accept
      * incoming connection requests.
      */
-    public ?string $enable_from = null;
+    public false|int|null $enable_from = null;
 
     /**
      * Date/time until which the tool consumer instance is enabled to accept
      * incoming connection requests.
      */
-    public ?string $enable_until = null;
+    public false|int|null $enable_until = null;
 
     /**
      * Date of last connection from this tool consumer.
@@ -108,7 +108,7 @@ class ToolConsumer
      * Class constructor.
      *
      * @param ?string $key Consumer key.
-     * @param string $data_connector String containing table name prefix, or
+     * @param DataConnectorPdo|string|null $data_connector String containing table name prefix, or
      *                              database connection object, or array
      *                              containing one or both values (optional,
      *                              default is MySQL with an empty table name
@@ -118,10 +118,13 @@ class ToolConsumer
      */
     public function __construct(
         ?string $key = null,
-        string $data_connector = '',
+        DataConnectorPdo|string|null $data_connector = '',
         bool $autoEnable = false
     ) {
-        $this->data_connector = AbstractDataConnector::getDataConnector($data_connector);
+        $this->data_connector = AbstractDataConnector::getDataConnector(
+            $data_connector
+        );
+
         if (!empty($key)) {
             $this->load($key, $autoEnable);
         } else {

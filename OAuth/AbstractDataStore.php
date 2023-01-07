@@ -6,8 +6,6 @@ declare(strict_types=1);
 
 namespace Oscelot\OAuth;
 
-use Oscelot\Lti\ConsumerNonce;
-
 abstract class AbstractDataStore
 {
     abstract public function lookup_consumer(string $consumer_key);

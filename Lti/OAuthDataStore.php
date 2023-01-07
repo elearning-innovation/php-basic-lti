@@ -18,7 +18,7 @@ class OAuthDataStore extends AbstractDataStore
     /**
      * ToolProvider object.
      */
-    private ?ToolProvider $tool_provider = null;
+    private ?ToolProvider $tool_provider;
 
     public function __construct(ToolProvider $tool_provider)
     {

@@ -443,7 +443,8 @@ EOF;
                     switch ($action) {
                         case self::EXT_READ:
                             if (!isset(
-                                $this->ext_nodes['imsx_POXBody']["{$do}Response"]['result']['resultScore']['textString'])
+                                $this->ext_nodes['imsx_POXBody']["{$do}Response"]['result']['resultScore']['textString']
+                            )
                             ) {
                                 break;
                             } else {
@@ -451,6 +452,7 @@ EOF;
                                     $this->ext_nodes['imsx_POXBody']["{$do}Response"]['result']['resultScore']['textString']
                                 );
                             }
+                            break;
                         case self::EXT_WRITE:
                         case self::EXT_DELETE:
                             $response = true;
@@ -563,8 +565,7 @@ EOF;
                 $user->setNames($firstname, $lastname, $fullname);
 
                 // Set the user email
-                $email = (isset($members[$i]['person_contact_email_primary'])) ?
-                    $members[$i]['person_contact_email_primary'] : '';
+                $email = $members[$i]['person_contact_email_primary'] ?? '';
                 $user->setEmail($email, $this->consumer->defaultEmail);
                 #
                 ### Set the user roles
@@ -998,13 +999,13 @@ EOF;
      * Get the response from an HTTP POST request.
      *
      * @param string      $url    URL to send request to.
-     * @param array       $params Associative array of parameter values to be passed.
+     * @param array|string       $params Associative array of parameter values to be passed.
      * @param ?string $header Values to include in the request header (optional, default is none).
      * @return string response contents, empty if the request was not successful.
      */
     private function do_post_request(
         string $url,
-        array $params,
+        array|string $params,
         ?string $header = null
     ): string {
         $ok = false;
