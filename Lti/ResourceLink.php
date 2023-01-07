@@ -329,7 +329,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      *
      * @return bool True if this resource link supports the Memberships service
      */
-    public function hasMembershipsService()
+    public function hasMembershipsService(): bool
     {
         $url = $this->getSetting('ext_ims_lis_memberships_url');
 
@@ -341,7 +341,7 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
      *
      * @return bool True if this resource link supports the Setting service
      */
-    public function hasSettingService()
+    public function hasSettingService(): bool
     {
         $url = $this->getSetting('ext_ims_lti_tool_setting_url');
 
@@ -351,28 +351,30 @@ use Oscelot\OAuth\SignatureMethodHmacSha1;
     /**
      * Perform an Outcomes service request.
      *
-     * @param int $action The action type constant
-     * @param LTI_Outcome $lti_outcome Outcome object
-     * @param User $user User object
-     *
-     * @return bool True if the request was successfully processed
+     * @param int $action The action type constant.
+     * @param Outcome $lti_outcome Outcome object.
+     * @param User $user User object.
+     * @return bool True if the request was successfully processed.
      */
-    public function doOutcomesService($action, $lti_outcome, $user = null)
-    {
+    public function doOutcomesService(
+        $action,
+        $lti_outcome,
+        $user = null
+    ): bool|string {
         $response = false;
         $this->ext_response = null;
-        #
-        ### Lookup service details from the source resource link appropriate to the user (in case the destination is being shared)
-        #
+
+        // Lookup service details from the source resource link appropriate to
+        // the user (in case the destination is being shared).
         $source_resource_link = $this;
         $sourcedid = $lti_outcome->getSourcedid();
         if (!is_null($user)) {
             $source_resource_link = $user->getResourceLink();
             $sourcedid = $user->lti_result_sourcedid;
         }
-        #
-        ### Use LTI 1.1 service in preference to extension service if it is available
-        #
+
+        // Use LTI 1.1 service in preference to extension service if it is
+        // available.
         $urlLTI11 = $source_resource_link->getSetting('lis_outcome_service_url');
         $urlExt = $source_resource_link->getSetting('ext_ims_lis_basic_outcome_url');
         if ($urlExt || $urlLTI11) {
@@ -488,11 +490,12 @@ EOF;
      *
      * The user table is updated with the new list of user objects.
      *
-     * @param bool $withGroups True is group information is to be requested as well
-     *
-     * @return mixed Array of User objects or False if the request was not successful
+     * @param bool $withGroups True is group information is to be requested as
+     *                         well.
+     * @return mixed Array of User objects or False if the request was not
+     *               successful.
      */
-    public function doMembershipsService($withGroups = false)
+    public function doMembershipsService(bool $withGroups = false): mixed
     {
         $users = array();
         $old_users = $this->getUserResultSourcedIDs(true, ToolProvider::ID_SCOPE_RESOURCE);
@@ -526,24 +529,28 @@ EOF;
                 #
                 ### Set the user name
                 #
-                $firstname = (isset($members[$i]['person_name_given'])) ? $members[$i]['person_name_given'] : '';
-                $lastname = (isset($members[$i]['person_name_family'])) ? $members[$i]['person_name_family'] : '';
-                $fullname = (isset($members[$i]['person_name_full'])) ? $members[$i]['person_name_full'] : '';
+                $firstname = (isset($members[$i]['person_name_given'])) ?
+                    $members[$i]['person_name_given'] : '';
+                $lastname = (isset($members[$i]['person_name_family'])) ?
+                    $members[$i]['person_name_family'] : '';
+                $fullname = (isset($members[$i]['person_name_full'])) ?
+                    $members[$i]['person_name_full'] : '';
                 $user->setNames($firstname, $lastname, $fullname);
-                #
-                ### Set the user email
-                #
-                $email = (isset($members[$i]['person_contact_email_primary'])) ? $members[$i]['person_contact_email_primary'] : '';
+
+                // Set the user email
+                $email = (isset($members[$i]['person_contact_email_primary'])) ?
+                    $members[$i]['person_contact_email_primary'] : '';
                 $user->setEmail($email, $this->consumer->defaultEmail);
                 #
                 ### Set the user roles
                 #
                 if (isset($members[$i]['roles'])) {
-                    $user->roles = ToolProvider::parseRoles($members[$i]['roles']);
+                    $user->roles = ToolProvider::parseRoles(
+                        $members[$i]['roles']
+                    );
                 }
-                #
-                ### Set the user groups
-                #
+
+                // Set the user groups
                 if (!isset($members[$i]['groups']['group'])) {
                     $groups = array();
                 } elseif (!isset($members[$i]['groups']['group'][0])) {
@@ -567,16 +574,27 @@ EOF;
                         }
 
                         $this->group_sets[$set_id]['num_members']++;
+
                         if ($user->isStaff()) {
                             $this->group_sets[$set_id]['num_staff']++;
                         }
+
                         if ($user->isLearner()) {
                             $this->group_sets[$set_id]['num_learners']++;
                         }
-                        if (!in_array($group['id'], $this->group_sets[$set_id]['groups'])) {
+
+                        if (!in_array(
+                            $group['id'],
+                            $this->group_sets[$set_id]['groups']
+                        )
+                        ) {
                             $this->group_sets[$set_id]['groups'][] = $group['id'];
                         }
-                        $this->groups[$group['id']] = array('title' => $group['title'], 'set' => $set_id);
+
+                        $this->groups[$group['id']] = array(
+                            'title' => $group['title'],
+                            'set' => $set_id
+                        );
                     } else {
                         $this->groups[$group['id']] = array('title' => $group['title']);
                     }
@@ -613,11 +631,13 @@ EOF;
      *
      * @param int    $action The action type constant
      * @param string $value  The setting value (optional, default is null)
-     *
-     * @return mixed The setting value for a read action, true if a write or delete action was successful, otherwise false
+     * @return mixed The setting value for a read action, true if a write or
+     *               delete action was successful, otherwise false.
      */
-    public function doSettingService($action, $value = null)
-    {
+    public function doSettingService(
+        $action,
+        $value = null
+    ): mixed {
         $response = false;
         $this->ext_response = null;
         switch ($action) {
@@ -678,7 +698,7 @@ EOF;
      * @param int|null $id_scope Scope to use for ID values (optional, default
      *                           is null for consumer default).
      *
-     * @return array Array of User objects
+     * @return array Array of User objects.
      */
     public function getUserResultSourcedIDs(
         bool $local_only = false,
@@ -697,7 +717,7 @@ EOF;
      *
      * @return array Array of ResourceLink_Share objects.
      */
-    public function getShares()
+    public function getShares(): array
     {
         return $this->consumer->getDataConnector()->Resource_Link_getShares($this);
     }
@@ -861,8 +881,7 @@ EOF;
                     $this->ext_doc->loadXML($this->ext_response);
                     $this->ext_nodes = $this->domnode_to_array($this->ext_doc->documentElement);
 
-                    if (
-                        !isset($this->ext_nodes['statusinfo']['codemajor'])
+                    if (!isset($this->ext_nodes['statusinfo']['codemajor'])
                         || ($this->ext_nodes['statusinfo']['codemajor'] != 'Success')
                     ) {
                         $this->ext_response = null;
