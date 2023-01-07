@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpCSValidationInspection */
+
 declare(strict_types=1);
 
 namespace Oscelot\Lti;
@@ -26,9 +28,8 @@ class OAuthDataStore extends AbstractDataStore
     /**
      * Create an OAuthConsumer object for the tool consumer.
      *
-     * @param string $consumer_key Consumer key value
-     *
-     * @return Consumer OAuthConsumer object
+     * @param string $consumer_key Consumer key value.
+     * @return Consumer OAuthConsumer object.
      */
     public function lookup_consumer(string $consumer_key): Consumer
     {
@@ -41,28 +42,34 @@ class OAuthDataStore extends AbstractDataStore
     /**
      * Create an OAuthToken object for the tool consumer.
      *
-     * @param string $consumer   OAuthConsumer object
-     * @param string $token_type Token type
-     * @param string $token      Token value
-     *
-     * @return Token OAuthToken object
+     * @param Consumer $consumer   OAuthConsumer object.
+     * @param string   $token_type Token type.
+     * @param string   $token      Token value.
+     * @return Token OAuthToken object.
      */
-    public function lookup_token($consumer, $token_type, $token)
-    {
+    public function lookup_token(
+        Consumer $consumer,
+        string $token_type,
+        string $token
+    ): Token {
         return new Token($consumer, "");
     }
 
     /**
      * Lookup nonce value for the tool consumer.
      *
-     * @param Consumer $consumer  OAuthConsumer object
-     * @param string        $token     Token value
-     * @param string        $value     Nonce value
-     * @param string        $timestamp Date/time of request
-     * @return bool True if the nonce value already exists
+     * @param Consumer $consumer  OAuthConsumer object.
+     * @param string   $token     Token value.
+     * @param ?string   $value     Nonce value.
+     * @param string   $timestamp Date/time of request.
+     * @return bool True if the nonce value already exists.
      */
-    public function lookup_nonce($consumer, $token, $value, $timestamp)
-    {
+    public function lookup_nonce(
+        Consumer $consumer,
+        string $token,
+        ?string $value,
+        string $timestamp
+    ): bool {
         $nonce = new ConsumerNonce($this->tool_provider->consumer, $value);
         $ok = !$nonce->load();
         if ($ok) {
@@ -78,23 +85,28 @@ class OAuthDataStore extends AbstractDataStore
     /**
      * Get new request token.
      *
-     * @param Consumer $consumer  OAuthConsumer object
-     * @param string        $callback  Callback URL
+     * @param Consumer $consumer OAuthConsumer object.
+     * @param ?string  $callback Callback URL.
      */
-    public function new_request_token($consumer, $callback = null): ?string
-    {
+    public function new_request_token(
+        Consumer $consumer,
+        $callback = null
+    ): ?Token {
         return null;
     }
 
     /**
      * Get new access token.
      *
-     * @param string        $token     Token value
-     * @param Consumer $consumer  OAuthConsumer object
-     * @param string        $verifier  Verification code
+     * @param string|Token $token    Token value.
+     * @param Consumer     $consumer OAuthConsumer object.
+     * @param null         $verifier Verification code.
      */
-    public function new_access_token($token, $consumer, $verifier = null): ?string
-    {
+    public function new_access_token(
+        string|Token $token,
+        Consumer $consumer,
+        $verifier = null
+    ): ?Token {
         return null;
     }
 }

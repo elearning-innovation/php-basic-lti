@@ -1,42 +1,43 @@
 <?php
 
+/** @noinspection PhpCSValidationInspection */
+
 declare(strict_types=1);
 
 namespace Oscelot\OAuth;
 
 use Oscelot\Lti\ConsumerNonce;
-use Oscelot\Lti\ToolConsumer;
 
 abstract class AbstractDataStore
 {
     abstract public function lookup_consumer(string $consumer_key);
 
     abstract public function lookup_token(
-        ToolConsumer $consumer,
+        Consumer $consumer,
         string $token_type,
         string $token
     );
 
     abstract public function lookup_nonce(
-        ToolConsumer $consumer,
+        Consumer $consumer,
         string $token,
-        ConsumerNonce $nonce,
+        ?string $value, // Nonce value
         string $timestamp
     );
 
     /**
-     * @param ToolConsumer $consumer
+     * @param Consumer $consumer
      * @param              $callback
-     * @return Token A new token attached to this consumer
+     * @return ?Token A new token attached to this consumer
      */
     abstract public function new_request_token(
-        ToolConsumer $consumer,
+        Consumer $consumer,
         $callback = null
-    ): Token;
+    ): ?Token;
 
     /**
      * @param Token        $token
-     * @param ToolConsumer $consumer
+     * @param Consumer $consumer
      * @param              $verifier
      *
      * @return Token A new access token attached to this consumer for the user
@@ -45,7 +46,7 @@ abstract class AbstractDataStore
      */
     abstract public function new_access_token(
         Token $token,
-        ToolConsumer $consumer,
+        Consumer $consumer,
         $verifier = null
-    ): Token;
+    ): ?Token;
 }

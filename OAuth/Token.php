@@ -11,7 +11,7 @@ class Token
      * secret = the token secret
      */
     public function __construct(
-        public string $key,
+        public Consumer $key,
         public string $secret
     ) {
     }
@@ -25,8 +25,8 @@ class Token
     public function __toString()
     {
         return 'oauth_token='
-            . OAuthUtil::urlencode_rfc3986($this->key)
+            . Util::urlencode_rfc3986($this->key)
             . '&oauth_token_secret='
-            . OAuthUtil::urlencode_rfc3986($this->secret);
+            . Util::urlencode_rfc3986($this->secret);
     }
 }
