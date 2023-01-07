@@ -557,9 +557,15 @@ EOF;
                     if (isset($group['set'])) {
                         $set_id = $group['set']['id'];
                         if (!isset($this->group_sets[$set_id])) {
-                            $this->group_sets[$set_id] = array('title' => $group['set']['title'], 'groups' => array(),
-                                                               'num_members' => 0, 'num_staff' => 0, 'num_learners' => 0);
+                            $this->group_sets[$set_id] = array(
+                                'title' => $group['set']['title'],
+                                'groups' => array(),
+                                'num_members' => 0,
+                                'num_staff' => 0,
+                                'num_learners' => 0
+                            );
                         }
+
                         $this->group_sets[$set_id]['num_members']++;
                         if ($user->isStaff()) {
                             $this->group_sets[$set_id]['num_staff']++;
@@ -756,6 +762,7 @@ EOF;
                     $lti_outcome->setValue($parts[0] / $parts[1]);
                     $lti_outcome->type = self::EXT_TYPE_DECIMAL;
                 }
+
                 // Convert letter_af to letter_af_plus or text
             } elseif ($type == self::EXT_TYPE_LETTER_AF) {
                 if (in_array(self::EXT_TYPE_LETTER_AF_PLUS, $supported_types)) {
@@ -800,17 +807,20 @@ EOF;
     /**
      * Send a service request to the tool consumer.
      *
-     * @param string $type   Message type value
-     * @param string $url    URL to send request to
-     * @param array  $params Associative array of parameter values to be passed
-     *
-     * @return bool True if the request successfully obtained a response
+     * @param string $type   Message type value.
+     * @param string $url    URL to send request to.
+     * @param array  $params Associative array of parameter values to be passed.
+     * @return bool True if the request successfully obtained a response.
      */
-    private function doService($type, $url, $params): bool
-    {
+    private function doService(
+        string $type,
+        string $url,
+        array $params
+    ): bool {
         $this->ext_response = null;
         if (!empty($url)) {
-            // Check for query parameters which need to be included in the signature
+            // Check for query parameters which need to be included in the
+            // signature.
             $query_params = array();
             $query_string = parse_url($url, PHP_URL_QUERY);
             if (!is_null($query_string)) {
@@ -824,15 +834,18 @@ EOF;
                     }
                 }
             }
-            $params = $params + $query_params;
+
+            $params += $query_params;
+
             // Add standard parameters
             $params['oauth_consumer_key'] = $this->consumer->getKey();
             $params['lti_version'] = ToolProvider::LTI_VERSION;
             $params['lti_message_type'] = $type;
+
             // Add OAuth signature
-            $hmac_method = new OAuthSignatureMethod_HMAC_SHA1();
-            $consumer = new OAuthConsumer($this->consumer->getKey(), $this->consumer->secret, null);
-            $req = OAuthRequest::from_consumer_and_token($consumer, null, 'POST', $url, $params);
+            $hmac_method = new SignatureMethodHmacSha1();
+            $consumer = new Consumer($this->consumer->getKey(), $this->consumer->secret, null);
+            $req = Request::from_consumer_and_token($consumer, null, 'POST', $url, $params);
             $req->sign_request($hmac_method, $consumer, null);
             $params = $req->get_parameters();
             // Remove parameters being passed on the query string
@@ -847,7 +860,11 @@ EOF;
                     $this->ext_doc = new DOMDocument();
                     $this->ext_doc->loadXML($this->ext_response);
                     $this->ext_nodes = $this->domnode_to_array($this->ext_doc->documentElement);
-                    if (!isset($this->ext_nodes['statusinfo']['codemajor']) || ($this->ext_nodes['statusinfo']['codemajor'] != 'Success')) {
+
+                    if (
+                        !isset($this->ext_nodes['statusinfo']['codemajor'])
+                        || ($this->ext_nodes['statusinfo']['codemajor'] != 'Success')
+                    ) {
                         $this->ext_response = null;
                     }
                 } catch (Exception $e) {

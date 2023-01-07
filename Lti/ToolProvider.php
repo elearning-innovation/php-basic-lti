@@ -137,7 +137,7 @@ class ToolProvider
      * @var ?array Array of LTI parameter constraints for auto validation
      *             checks.
      */
-    private ?array $constraints = null;
+    private ?array $constraints;
 
     /**
      * @var array|string[] Names of LTI parameters to be retained in the

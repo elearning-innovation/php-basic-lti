@@ -70,9 +70,9 @@ class Outcome
      *
      * @deprecated Use User object instead
      *
-     * @return string Result sourcedid value
+     * @return ?string Result sourcedid value
      */
-    public function getSourcedid()
+    public function getSourcedid(): ?string
     {
         return $this->sourcedid;
     }

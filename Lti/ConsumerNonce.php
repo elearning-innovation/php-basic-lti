@@ -28,6 +28,7 @@ class ConsumerNonce
      * ToolConsumer object to which this nonce applies.
      */
     private ?ToolConsumer $consumer;
+
     /**
      * Nonce value.
      */
