@@ -26,7 +26,7 @@ abstract class AbstractDataConnector
     /**
      * Default name for database table used to store users.
      */
-    public const USER_TABLE_NAME = 'User';
+    public const USER_TABLE_NAME = 'lti_user';
 
     /**
      * Default name for database table used to store resource link share keys.

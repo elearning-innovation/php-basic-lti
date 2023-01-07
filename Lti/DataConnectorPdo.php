@@ -17,7 +17,7 @@ class DataConnectorPdo extends AbstractDataConnector
 {
     public function __construct(
         private readonly PDO $db,
-        private readonly string $dbTableNamePrefix = 'lti_'
+        private readonly string $dbTableNamePrefix = ''
     ) {
     }
 
