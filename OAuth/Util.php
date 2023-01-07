@@ -10,7 +10,14 @@ class Util
     public static function urlencode_rfc3986($input): array|string
     {
         if (is_array($input)) {
-            return array_map(['Util', 'urlencode_rfc3986'], $input);
+            return array_map(
+                static fn ($string) => str_replace(
+                    array('%7E', '+'),
+                    array('~', ' '),
+                    rawurlencode($string)
+                ),
+                $input
+            );
         }
 
         if (is_scalar($input)) {

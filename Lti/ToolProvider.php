@@ -78,7 +78,7 @@ class ToolProvider
      *  @deprecated Use resource_link instead
      *  @see ToolProvider::$resource_link
      */
-    public ?Context $context = null;
+    public ?ResourceLink $context = null;
 
     public ?AbstractDataConnector $data_connector = null;
 

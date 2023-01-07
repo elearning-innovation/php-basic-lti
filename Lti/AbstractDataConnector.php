@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Oscelot\Lti;
 
+use PDO;
+
 /**
  * Abstract class to provide a connection to a persistent store for LTI objects.
  *
@@ -24,7 +26,7 @@ abstract class AbstractDataConnector
     /**
      * Default name for database table used to store users.
      */
-    public const USER_TABLE_NAME = 'User';
+    public const USER_TABLE_NAME = 'lti_user';
 
     /**
      * Default name for database table used to store resource link share keys.
@@ -212,68 +214,14 @@ abstract class AbstractDataConnector
      * a call to mysqli_connect() or a PDO object).  A bespoke data connector
      * class can be specified in the optional third parameter.
      *
-     * @param mixed $data_connector A data connector object, string or
-     *                              array.
-     * @param mixed|null $db        A database connection object or string
-     *                              (optional).
-     * @param string|null $type     The type of data connector (optional).
-     *
-     * @return AbstractDataConnector Data connector object.
+     * @param PDO|DataConnectorPdo $db A database connection object or string
+     *                                 (optional).
+     * @return DataConnectorPdo Data connector object.
      */
     public static function getDataConnector(
-        mixed $data_connector,
-        mixed $db = null,
-        string $type = null
-    ): AbstractDataConnector {
-        if (!is_object($data_connector)
-            || !is_subclass_of($data_connector, get_class())
-        ) {
-            $prefix = null;
-            if (is_string($data_connector)) {
-                $prefix = $data_connector;
-            } elseif (is_array($data_connector)) {
-                for ($i = 0; $i < min(count($data_connector), 3); $i++) {
-                    if (is_string($data_connector[$i])) {
-                        if (is_null($prefix)) {
-                            $prefix = $data_connector[$i];
-                        } elseif (is_null($type)) {
-                            $type = $data_connector[$i];
-                        }
-                    } elseif (is_null($db)) {
-                        $db = $data_connector[$i];
-                    }
-                }
-            } elseif (is_object($data_connector)) {
-                $db = $data_connector;
-            }
-            if (is_null($prefix)) {
-                $prefix = '';
-            }
-            if (!is_null($db)) {
-                if (is_string($db)) {
-                    $type = $db;
-                } elseif (is_null($type)) {
-                    if (is_object($db)) {
-                        $type = get_class($db);
-                    } else {
-                        $type = 'mysql';
-                    }
-                }
-            }
-            if (is_null($type)) {
-                $type = 'mysql';
-            }
-            $type = strtolower($type);
-            $type = "DataConnector{$type}";
-
-            if (is_null($db)) {
-                $data_connector = new $type($prefix);
-            } else {
-                $data_connector = new $type($db, $prefix);
-            }
-        }
-
-        return $data_connector;
+        PDO|DataConnectorPdo $db
+    ): DataConnectorPdo {
+        return $db instanceof PDO ? new DataConnectorPdo($db) : $db;
     }
 
     /**

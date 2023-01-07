@@ -1,6 +1,6 @@
 {
   "name": "elearning-innovation/php-basic-lti",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Ease learning's fork of the original oscelot LTI 1.1 library",
   "type": "library",
   "license": "LGPL-3.0-only",

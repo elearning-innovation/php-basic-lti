@@ -17,7 +17,7 @@ abstract class AbstractDataStore
 
     abstract public function lookup_nonce(
         Consumer $consumer,
-        string $token,
+        Token $token,
         ?string $value, // Nonce value
         string $timestamp
     );

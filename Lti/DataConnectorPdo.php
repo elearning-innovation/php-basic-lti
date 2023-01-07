@@ -15,13 +15,10 @@ use PDO;
 // phpcs:disable Generic.Files.LineLength.TooLong
 class DataConnectorPdo extends AbstractDataConnector
 {
-    private string $dbTableNamePrefix;
-    private ?PDO $db;
-
-    public function __construct(?PDO $db, string $dbTableNamePrefix = '')
-    {
-        $this->db = $db;
-        $this->dbTableNamePrefix = $dbTableNamePrefix;
+    public function __construct(
+        private readonly PDO $db,
+        private readonly string $dbTableNamePrefix = ''
+    ) {
     }
 
     /**
@@ -487,7 +484,6 @@ class DataConnectorPdo extends AbstractDataConnector
      */
     public function Resource_Link_getShares($resource_link): array
     {
-
         $shares = array();
 
         $key = $resource_link->getKey();

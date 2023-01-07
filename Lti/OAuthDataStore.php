@@ -44,13 +44,13 @@ class OAuthDataStore extends AbstractDataStore
      *
      * @param Consumer $consumer   OAuthConsumer object.
      * @param string   $token_type Token type.
-     * @param string   $token      Token value.
+     * @param ?string   $token      Token value.
      * @return Token OAuthToken object.
      */
     public function lookup_token(
         Consumer $consumer,
         string $token_type,
-        string $token
+        ?string $token
     ): Token {
         return new Token($consumer, "");
     }
@@ -59,14 +59,14 @@ class OAuthDataStore extends AbstractDataStore
      * Lookup nonce value for the tool consumer.
      *
      * @param Consumer $consumer  OAuthConsumer object.
-     * @param string   $token     Token value.
+     * @param Token   $token     Token value.
      * @param ?string   $value     Nonce value.
      * @param string   $timestamp Date/time of request.
      * @return bool True if the nonce value already exists.
      */
     public function lookup_nonce(
         Consumer $consumer,
-        string $token,
+        Token $token,
         ?string $value,
         string $timestamp
     ): bool {
