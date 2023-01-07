@@ -10,25 +10,30 @@ namespace Oscelot\OAuth;
  * encoded per Parameter Encoding) of the Consumer Secret and Token Secret, separated by an '&'
  * character (ASCII code 38) even if empty.
  *   - Chapter 9.2 ("HMAC-SHA1")
+ *
+ * phpcs:disable PSR1.Methods.CamelCapsMethodName
  */
 class SignatureMethodHmacSha1 extends AbstractSignatureMethod
 {
-    function get_name()
+    public function get_name(): string
     {
         return 'HMAC-SHA1';
     }
 
-    public function build_signature(Request $request, Consumer $consumer, $token)
-    {
+    public function build_signature(
+        Request $request,
+        Consumer $consumer,
+        $token
+    ): string {
         $base_string          = $request->get_signature_base_string();
         $request->base_string = $base_string;
 
         $key_parts = [
             $consumer->secret,
-            $token ? $token->secret : '',
+            $token->secret ?? '',
         ];
 
-        $key_parts = OAuthUtil::urlencode_rfc3986($key_parts);
+        $key_parts = Util::urlencode_rfc3986($key_parts);
         $key       = implode('&', $key_parts);
 
         return base64_encode(hash_hmac('sha1', $base_string, $key, true));

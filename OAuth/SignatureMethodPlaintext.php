@@ -8,6 +8,8 @@ namespace Oscelot\OAuth;
  * The PLAINTEXT method does not provide any security protection and SHOULD only be used
  * over a secure channel such as HTTPS. It does not use the Signature Base String.
  *   - Chapter 9.4 ("PLAINTEXT")
+ *
+ * phpcs:disable PSR1.Methods.CamelCapsMethodName
  */
 class SignatureMethodPlaintext extends AbstractSignatureMethod
 {
@@ -25,14 +27,17 @@ class SignatureMethodPlaintext extends AbstractSignatureMethod
      * Please note that the second encoding MUST NOT happen in the SignatureMethod, as
      * OAuthRequest handles this!
      */
-    public function build_signature(Request $request, Consumer $consumer, $token): string
-    {
+    public function build_signature(
+        Request $request,
+        Consumer $consumer,
+        $token
+    ): string {
         $key_parts = [
             $consumer->secret,
-            $token ? $token->secret : '',
+            $token->secret ?? '',
         ];
 
-        $key_parts            = OAuthUtil::urlencode_rfc3986($key_parts);
+        $key_parts            = Util::urlencode_rfc3986($key_parts);
         $key                  = implode('&', $key_parts);
         $request->base_string = $key;
 
