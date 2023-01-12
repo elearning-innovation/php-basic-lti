@@ -7,24 +7,20 @@ namespace Oscelot\OAuth;
 // phpcs:disable PSR1.Methods.CamelCapsMethodName
 class Util
 {
+    /**
+     * @param $input
+     *
+     * @return array|string
+     */
     public static function urlencode_rfc3986($input): array|string
     {
         if (is_array($input)) {
-            return array_map(
-                static fn ($string) => str_replace(
-                    array('%7E', '+'),
-                    array('~', ' '),
-                    rawurlencode($string)
-                ),
-                $input
-            );
-        }
-
-        if (is_scalar($input)) {
+            return array_map(['OAuthUtil', 'urlencode_rfc3986'], $input);
+        } elseif (is_scalar($input)) {
             return str_replace(
-                array('%7E', '+'),
-                array('~', ' '),
-                rawurlencode($input)
+                '+',
+                ' ',
+                str_replace('%7E', '~', rawurlencode($input))
             );
         } else {
             return '';
