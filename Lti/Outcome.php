@@ -42,25 +42,19 @@ class Outcome
     private ?string $sourcedid;
 
     /**
-     * Outcome value.
-     */
-    private int|float|null $value;
-
-    /**
      * Class constructor.
      *
-     * @param ?string $sourcedid Result sourcedid value for the user/resource
-     *                           link (optional, default is to use associated
-     *                           User object).
-     * @param ?string $value     Outcome value (optional, default is none).
+     * @param ?string        $sourcedid Result sourcedid value for the user/resource
+     *                                  link (optional, default is to use associated
+     *                                  User object).
+     * @param int|float|null $value     Outcome value (optional, default is none).
      */
     public function __construct(
         ?string $sourcedid = null,
-        ?string $value = null
+        private int|float|null $value = null
     ) {
         /** @noinspection PhpDeprecationInspection */
         $this->sourcedid = $sourcedid;
-        $this->value = $value;
         $this->language = 'en-US';
         $this->date = gmdate('Y-m-d\TH:i:s\Z', time());
         $this->type = 'decimal';
@@ -81,9 +75,9 @@ class Outcome
     /**
      * Get the outcome value.
      *
-     * @return ?string Outcome value.
+     * @return int|float|null Outcome value.
      */
-    public function getValue(): ?string
+    public function getValue(): int|float|null
     {
         return $this->value;
     }
@@ -91,9 +85,9 @@ class Outcome
     /**
      * Set the outcome value.
      *
-     * @param int|float $value Outcome value.
+     * @param int|float|null $value Outcome value.
      */
-    public function setValue(int|float $value): void
+    public function setValue(int|float|null $value): void
     {
         $this->value = $value;
     }
