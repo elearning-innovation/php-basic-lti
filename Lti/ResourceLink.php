@@ -1069,10 +1069,10 @@ EOF;
     /**
      * Convert DOM nodes to array.
      *
-     * @param ?DOMElement $node XML element.
+     * @param null|DOMElement|\DOMText $node XML element.
      * @return array|string Array of XML document elements.
      */
-    private function domnode_to_array(?DOMElement $node): array|string
+    private function domnode_to_array(null|DOMElement|\DOMText $node): array|string
     {
         $output = array();
         switch ($node?->nodeType) {
