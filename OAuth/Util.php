@@ -4,18 +4,34 @@ declare(strict_types=1);
 
 namespace Oscelot\OAuth;
 
+use function array_combine;
+use function array_keys;
+use function array_map;
+use function array_values;
+use function explode;
+use function function_exists;
+use function implode;
+use function is_array;
+use function is_scalar;
+use function preg_match_all;
+use function rawurlencode;
+use function sort;
+use function str_replace;
+use function strtolower;
+use function substr;
+use function ucwords;
+use function uksort;
+use function urldecode;
+
+use const SORT_STRING;
+
 // phpcs:disable PSR1.Methods.CamelCapsMethodName
 class Util
 {
-    /**
-     * @param $input
-     *
-     * @return array|string
-     */
     public static function urlencode_rfc3986($input): array|string
     {
         if (is_array($input)) {
-            return array_map(['OAuthUtil', 'urlencode_rfc3986'], $input);
+            return array_map([self::class, 'urlencode_rfc3986'], $input);
         } elseif (is_scalar($input)) {
             return str_replace(
                 '+',
@@ -43,7 +59,8 @@ class Util
     public static function split_header($header, $only_allow_oauth_parameters = true): array
     {
         $params = [];
-        if (preg_match_all('/(' . ($only_allow_oauth_parameters ?
+        if (
+            preg_match_all('/(' . ($only_allow_oauth_parameters ?
                 'oauth_' : '')
             . '[a-z_-]*)=(:?"([^"]*)"|([^,]*))/', $header, $matches)
         ) {
